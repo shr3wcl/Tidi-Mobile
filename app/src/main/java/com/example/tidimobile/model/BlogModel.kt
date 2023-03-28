@@ -1,0 +1,59 @@
+/**
+ * Phạm Minh Trí VKU
+ */
+package com.example.tidimobile.model
+
+data class BlogModelBasic(
+    val blogs: List<BlogBasicObject>? = null
+) {
+    data class BlogBasicObject(
+        val _id: String? = null,
+        val idUser: String? = null,
+        val title: String? = null,
+        val status: Boolean? = null,
+        val createdAt: String? = null,
+    )
+}
+
+class BlogModel(
+    val blogs: List<BlogObject>? = null
+) {
+    data class BlogObject(
+        val _id: String? = null,
+        val idUser: String? = null,
+        val title: String? = null,
+        val status: Boolean? = null,
+        val createdAt: String? = null,
+        val content: ContentObject? = null,
+    ) {
+        data class ContentObject(
+            val time: String? = null,
+            val blocks: ArrayList<BlockObject>? = null
+        ) {
+            data class BlockObject(
+                val id: String? = null,
+                val type: String? = null,
+                val data: DataObject? = null,
+                val tunes: TunesObject? = null,
+            ) {
+                data class DataObject(
+                    val text: String? = null,
+                    val level: Int? = null,
+                    val url: String? = null,
+                    val caption: String? = null,
+                    val withBorder: Boolean? = null,
+                    val withBackground: Boolean? = null,
+                    val stretched: Boolean? = null
+                )
+
+                data class TunesObject(
+                    val anyTuneName: AnyTuneNameObject? = null
+                ) {
+                    data class AnyTuneNameObject(
+                        val alignment: String? = null
+                    )
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/card_blog"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+<!--    <ImageView-->
+<!--        android:id="@+id/tag_image_view"-->
+<!--        android:layout_width="32dp"-->
+<!--        android:layout_height="32dp"-->
+<!--        android:src="@drawable/user" />-->
+
+    <TextView
+        android:id="@+id/txtTitleBlog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title Blog"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_marginTop="6dp"
+        android:id="@+id/txtDescriptionBlog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="Tag description. Lorem ipsum dolor sit amet"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="14sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp">
+        <TextView
+            android:id="@+id/txtAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10:45 a.m 12/3/2023"/>
+        <TextView
+            android:id="@+id/txtTimeCreated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="10:45 a.m 12/3/2023"/>
+    </LinearLayout>
+</LinearLayout>

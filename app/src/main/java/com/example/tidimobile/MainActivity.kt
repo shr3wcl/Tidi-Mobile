@@ -3,151 +3,79 @@
  */
 package com.example.tidimobile
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.tidimobile.api.ApiAuthInterface
-import com.example.tidimobile.api.ApiBlogInterface
-import com.example.tidimobile.api.ApiClient
 import com.example.tidimobile.databinding.ActivityMainBinding
-import com.example.tidimobile.model.*
-import com.example.tidimobile.storage.TokenPreferences
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.HttpException
-import retrofit2.Response
+import com.example.tidimobile.fragment.UserFragment
+import com.example.tidimobile.fragment.BlogFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var service: ApiAuthInterface
-    private lateinit var blogService: ApiBlogInterface
-    private lateinit var appPrefs: TokenPreferences
+    lateinit var toggle: ActionBarDrawerToggle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        service = ApiClient.getService()
-        blogService = ApiClient.getBlog()
-        appPrefs = TokenPreferences(applicationContext)
-        binding.registerBtn.setOnClickListener {
-            registerHandle()
+
+        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        binding.navView.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.item1 -> Toast.makeText(applicationContext, "Clicked 1", Toast.LENGTH_SHORT).show()
+                R.id.item2 -> Toast.makeText(applicationContext, "Clicked 2", Toast.LENGTH_SHORT).show()
+                R.id.item3 -> Toast.makeText(applicationContext, "Clicked 3", Toast.LENGTH_SHORT).show()
+                R.id.item4 -> Toast.makeText(applicationContext, "Clicked 4", Toast.LENGTH_SHORT).show()
+            }
+            true
         }
 
-        binding.btnLogin.setOnClickListener {
-            loginHandle()
-        }
-
-        binding.btnGet.setOnClickListener {
-            getAllBlog()
-        }
-    }
-
-    private fun getAllBlog() {
-        val call = blogService.getAllBlogOfaUser("Bearer ${appPrefs.getToken()}")
-        call.enqueue(object : Callback<BlogModelBasic> {
-            override fun onResponse(
-                call: Call<BlogModelBasic>,
-                response: Response<BlogModelBasic>
-            ) {
-                if (response.isSuccessful) {
-                    val a = response.body()?.blogs
-                    var b = "Null"
-                    if (a != null) {
-                        if (a.isNotEmpty()) {
-                            b = a[0]._id.toString()
-                        }
+        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottom_navigation)
+        bottomNavigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    title = "Blog"
+                    supportFragmentManager.beginTransaction().apply {
+                        replace(R.id.fragment_container, BlogFragment.newInstance())
+                        addToBackStack(null)
+                        commit()
                     }
-                    Toast.makeText(this@MainActivity, b, Toast.LENGTH_SHORT).show()
-                } else {
-                    var a = response.errorBody()?.string()
-                    val gson = Gson()
-                    a = gson.fromJson(a, ResponseMessage::class.java).message
-                    Toast.makeText(this@MainActivity, a, Toast.LENGTH_SHORT).show()
+                    true
                 }
+                R.id.navigation_dashboard -> {
+                    title = "Dashboard"
+                    true
+                }
+                R.id.navigation_notifications -> {
+                    title = "Notification"
+                    true
+                }
+                R.id.navigation_user -> {
+                    title = "User"
+                    supportFragmentManager.beginTransaction().apply {
+                        replace(R.id.fragment_container, UserFragment.newInstance())
+                        addToBackStack(null)
+                        commit()
+                    }
+                    true
+                }
+                else -> false
             }
-
-            override fun onFailure(call: Call<BlogModelBasic>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Lỗi tào lao hơn", Toast.LENGTH_SHORT).show()
-
-            }
-
-        })
+        }
     }
 
-    private fun loginHandle() {
-        val user = UserLoginModel(
-            binding.edtUsername.text.toString(),
-            binding.edtPassword.text.toString()
-        )
-        val call = service.loginUser(user)
-        call.enqueue(object : Callback<UserLoginResponseModel> {
-            override fun onResponse(
-                call: Call<UserLoginResponseModel>,
-                response: Response<UserLoginResponseModel>
-            ) {
-                if (response.isSuccessful) {
-
-                    appPrefs.saveToken(response.body()?.token?.accessToken.toString())
-                    Toast.makeText(
-                        this@MainActivity,
-                        response.body()?.token?.accessToken.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    var a = response.errorBody()?.string()
-                    val gson = Gson()
-                    a = gson.fromJson(a, UserLoginResponseModel::class.java).message
-
-                    Toast.makeText(this@MainActivity, a, Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<UserLoginResponseModel>, t: Throwable) {
-                if (t is HttpException && t.code() == 401) {
-                    // handle unauthorized error
-                    // retrieve the error message from the response body
-                    val errorMessage = t.response()?.errorBody()?.string()
-                    // show error message to user or redirect to login page
-                    Toast.makeText(this@MainActivity, errorMessage, Toast.LENGTH_SHORT).show()
-                } else {
-                    // handle other errors
-                    Toast.makeText(this@MainActivity, t.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-            }
-
-
-        })
-    }
-
-    private fun registerHandle() {
-        val user = UserRegisterModel(
-            binding.edtFirstName.text.toString(),
-            binding.edtLastName.text.toString(),
-            binding.edtUsername.text.toString(),
-            binding.edtEmail.text.toString(),
-            binding.edtGender.text.toString(),
-            binding.edtPassword.text.toString()
-        )
-        val call = service.registerUser(user)
-        call.enqueue(object : Callback<ResponseMessage> {
-            override fun onResponse(
-                call: Call<ResponseMessage>,
-                response: Response<ResponseMessage>
-            ) {
-                if (response.isSuccessful) {
-                    Toast.makeText(this@MainActivity, "Success", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseMessage>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Failure", Toast.LENGTH_SHORT).show()
-
-            }
-
-        })
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

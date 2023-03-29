@@ -4,15 +4,22 @@
 package com.example.tidimobile.model
 
 data class BlogModelBasic(
-    val blogs: List<BlogBasicObject>? = null
+    val blogs: ArrayList<BlogBasicObject>? = null
 ) {
     data class BlogBasicObject(
         val _id: String? = null,
-        val idUser: String? = null,
+        val idUser: UserBlogObject? = null,
         val title: String? = null,
         val status: Boolean? = null,
+        val description: String? = null,
         val createdAt: String? = null,
-    )
+    ) {
+        data class UserBlogObject(
+            val _id: String? = null,
+            val firstName: String? = null,
+            val lastName: String? = null
+        )
+    }
 }
 
 class BlogModel(

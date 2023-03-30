@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiClient {
     companion object {
-        private const val BASE_URL = "https://6661-14-250-222-180.ap.ngrok.io"
+        private const val BASE_URL = "https://c596-14-250-222-180.ap.ngrok.io"
         private var retrofit: Retrofit? = null
 
         fun getService(): ApiAuthInterface {

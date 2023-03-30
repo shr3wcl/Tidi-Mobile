@@ -25,11 +25,12 @@ class UserFragment : Fragment() {
         binding = FragmentUserBinding.inflate(layoutInflater, container, false)
         appPrefs = TokenPreferences(inflater.context)
 
-        if(appPrefs.getToken()?.isEmpty() == false){
-            childFragmentManager.beginTransaction().add(R.id.fragment_container_user, UserInfoFragment.newInstance()).commit()
-        }else{
-            childFragmentManager.beginTransaction().add(R.id.fragment_container_user, LoginFragment.newInstance()).commit()
-
+        if (appPrefs.getToken()?.isEmpty() == false) {
+            childFragmentManager.beginTransaction()
+                .add(R.id.fragment_container_user, UserInfoFragment.newInstance()).commit()
+        } else {
+            childFragmentManager.beginTransaction()
+                .add(R.id.fragment_container_user, LoginFragment.newInstance()).commit()
         }
         return binding.root
     }

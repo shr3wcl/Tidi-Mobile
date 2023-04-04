@@ -1,5 +1,6 @@
 package com.example.tidimobile.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,21 +10,33 @@ import com.example.tidimobile.R
 import com.example.tidimobile.model.BlogModelBasic
 
 class BlogsAdapter(private var listBlogs: ArrayList<BlogModelBasic.BlogBasicObject>): RecyclerView.Adapter<BlogsAdapter.BlogViewHolder>() {
-    class BlogViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        init {
+    private lateinit var bListener: OnBlogClickListener
 
+    interface OnBlogClickListener{
+        fun onClickBlog(position: Int)
+    }
+
+    fun setOnItemClickListener(clickListener: OnBlogClickListener){
+        bListener = clickListener
+    }
+    class BlogViewHolder(itemView: View, clickListener: OnBlogClickListener): RecyclerView.ViewHolder(itemView){
+        init {
+            itemView.setOnClickListener {
+                clickListener.onClickBlog(adapterPosition)
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlogViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.blog_item_layout, parent, false)
-        return BlogViewHolder(view)
+        return BlogViewHolder(view, bListener)
     }
 
     override fun getItemCount(): Int {
         return listBlogs.size
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: BlogViewHolder, position: Int) {
         holder.itemView.apply {
             val tvTitle = findViewById<TextView>(R.id.txtTitleBlog)

@@ -1,10 +1,10 @@
 package com.example.tidimobile.fragment
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class UserInfoFragment() :
+class UserInfoFragment :
     Fragment() {
     private lateinit var service: ApiAuthInterface
     private lateinit var tokenPrefs: TokenPreferences
@@ -51,14 +51,14 @@ class UserInfoFragment() :
     }
 
     private fun getUserById(idUser: String) {
-        TODO("Not yet implemented")
+        print(idUser)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun getCurrentUser() {
         userCurrent = userPrefs.getInfoUser()
         binding.imageViewAvatar.setImageBitmap(userCurrent.avatar?.let { base64ToBitmap(it) })
         binding.txtNameProfile.text = "${userCurrent.firstName} ${userCurrent.lastName}"
-        Toast.makeText(context, userCurrent._id.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun logout() {

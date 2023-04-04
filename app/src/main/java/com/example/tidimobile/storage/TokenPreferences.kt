@@ -1,6 +1,3 @@
-/**
- * Phạm Minh Trí VKU
- */
 package com.example.tidimobile.storage
 
 import android.annotation.SuppressLint
@@ -9,11 +6,11 @@ import android.content.SharedPreferences
 
 
 class TokenPreferences(context: Context) {
-    private val SHARED_PREF_NAME = "TokenPref"
+    private val sharedPreferences = "TokenPref"
     private var preferences: SharedPreferences? = null
 
     init {
-        preferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        preferences = context.getSharedPreferences(sharedPreferences, Context.MODE_PRIVATE)
     }
 
     fun saveToken(accessToken: String?, refreshToken: String?) {

@@ -1,6 +1,3 @@
-/**
- * Phạm Minh Trí VKU
- */
 package com.example.tidimobile.api
 
 import com.example.tidimobile.model.NoteModel

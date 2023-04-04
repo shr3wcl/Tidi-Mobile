@@ -1,12 +1,6 @@
-/**
- * Phạm Minh Trí VKU
- */
 package com.example.tidimobile.api
 
-import com.example.tidimobile.model.BlogModel
-import com.example.tidimobile.model.BlogModelBasic
-import com.example.tidimobile.model.CommentModel
-import com.example.tidimobile.model.ResponseMessage
+import com.example.tidimobile.model.*
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -24,7 +18,7 @@ interface ApiBlogInterface {
     fun getAllBlogPublicUser(): Call<BlogModelBasic>
 
     @GET("/v1/user/blogs/{idBlog}")
-    fun getDetailBlog(@Path("idBlog") idBlog: String): Call<BlogModel>
+    fun getDetailBlog(@Path("idBlog") idBlog: String): Call<BlogModelDetail>
 
     @POST("/v1/user/blogs/store")
     fun saveNewBlog(

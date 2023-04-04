@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+    }
+}
+
+android {
+    compileSdkVersion versions.compileSdk
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode 1
+        versionName "1.0"
+
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    lintOptions {
+        warning 'InvalidPackage'
+    }
+}
+
+dependencies {
+    implementation "androidx.appcompat:appcompat:${versions.androidx_appcompat}"
+    implementation "androidx.core:core-ktx:${versions.androidx_core_ktx}"
+
+    api "com.hannesdorfmann:adapterdelegates4:${versions.adapter_delegates}"
+    api "com.github.bumptech.glide:glide:${versions.glide}"
+    implementation "androidx.constraintlayout:constraintlayout:${versions.androidx_constraint}"
+    testImplementation "junit:junit:${versions.junit}"
+}
+
+
+ext {
+    // group id
+    PUBLISH_GROUP_ID = 'io.github.upstarts'
+    // текущая версия библиотеки
+    PUBLISH_VERSION = "${versions.publishVersion}"
+    // artifact id библиотеки
+    PUBLISH_ARTIFACT_ID = 'ejkit'
+}
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"

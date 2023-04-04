@@ -6,11 +6,11 @@ import android.content.SharedPreferences
 import com.example.tidimobile.model.UserLoginResponseModel
 
 class UserPreferences(context: Context) {
-    private val SHARED_PREF_NAME = "UserPref"
+    private val sharedPreferences = "UserPref"
     private var preferences: SharedPreferences? = null
 
     init {
-        preferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        preferences = context.getSharedPreferences(sharedPreferences, Context.MODE_PRIVATE)
     }
 
     fun saveInfoUser(userObject: UserLoginResponseModel.UserLoginObject) {

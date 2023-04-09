@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tidimobile.BlogDetailActivity
-import com.example.tidimobile.MainActivity
 import com.example.tidimobile.R
 import com.example.tidimobile.adapter.BlogsAdapter
 import com.example.tidimobile.api.ApiBlogInterface

@@ -6,53 +6,62 @@
     android:orientation="vertical"
     android:id="@+id/fragment_login"
     tools:context=".fragment.LoginFragment"
-    android:layout_gravity="center"
-    android:gravity="center">
-
-
-    <EditText
-        android:id="@+id/edtUsername"
-        android:layout_gravity="center"
-        android:layout_width="360dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Username..."/>
-
-
-    <EditText
-        android:id="@+id/edtPassword"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:layout_width="360dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:hint="Password..."/>
-
+    android:layout_gravity="center">
 
     <LinearLayout
-        android:layout_width="360dp"
-        android:layout_marginTop="30dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/edit"
+            android:layout_marginBottom="50dp"/>
+        <EditText
+            android:id="@+id/edtUsername"
             android:layout_gravity="center"
-            android:layout_width="wrap_content"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
-            android:text="Login" />
-        <TextView
-            android:id="@+id/textToRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Username..."/>
+
+
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center"
-            android:text="Register"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:ignore="RtlHardcoded" />
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="Password..."/>
+
+
+        <LinearLayout
+            android:layout_width="360dp"
+            android:layout_marginTop="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login" />
+            <TextView
+                android:id="@+id/textToRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_gravity="center"
+                android:text="Register"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="RtlHardcoded" />
+        </LinearLayout>
     </LinearLayout>
 <!--    <ImageView-->
 <!--        android:id="@+id/imageView"-->

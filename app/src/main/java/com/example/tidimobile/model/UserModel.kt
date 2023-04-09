@@ -20,6 +20,8 @@ data class UserLoginResponseModel(
         val gender: String? = null,
         val admin: Boolean? = null,
         val avatar: String? = null,
+        val birthday: String? = null,
+        val bio: String? = null,
         val createdAt: String? = null
     )
 
@@ -36,4 +38,13 @@ data class UserRegisterModel(
 
 data class ResponseMessage(
     val message: String? = null
+)
+
+data class UserChangedModel(
+    val firstName: String? = null,
+    val lastName: String? = null,
+    val email: String? = null,
+    val gender: String? = null,
+    val birthday: String? = null,
+    val bio: String? = null,
 )

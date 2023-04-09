@@ -23,6 +23,8 @@ class UserPreferences(context: Context) {
         editor.putString("dayJoined", userObject.createdAt)
         editor.putString("avatar", userObject.avatar)
         editor.putString("username", userObject.username)
+        editor.putString("bio", userObject.bio)
+        editor.putString("birthday", userObject.birthday)
         userObject.admin?.let { editor.putBoolean("admin", it) }
 
         editor.apply()
@@ -38,6 +40,8 @@ class UserPreferences(context: Context) {
             preferences!!.getString("gender", ""),
             preferences!!.getBoolean("admin", false),
             preferences!!.getString("avatar", ""),
+            preferences!!.getString("birthday", ""),
+            preferences!!.getString("bio", ""),
             preferences!!.getString("dayJoined", ""),
             )
     }

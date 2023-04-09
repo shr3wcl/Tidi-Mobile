@@ -1,8 +1,10 @@
 package com.example.tidimobile.api
 
 import com.example.tidimobile.model.ResponseMessage
+import com.example.tidimobile.model.UserChangedModel
 import com.example.tidimobile.model.UserLoginResponseModel
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -15,8 +17,9 @@ interface ApiUserInterface {
     @POST("/v1/user/edit/{idUser}")
     fun changeInfoUser(
         @Path("idUser") idUser: String,
-        @Header("token") authToken: String
-    ): Call<UserLoginResponseModel>
+        @Header("token") authToken: String,
+        @Body data: UserChangedModel
+    ): Call<UserChangedModel>
 
     @POST("/v1/user/change/password")
     fun changePassword(@Header("token") authToken: String): Call<ResponseMessage>

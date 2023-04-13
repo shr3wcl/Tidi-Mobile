@@ -84,7 +84,13 @@ class UserInfoFragment :
     @SuppressLint("SetTextI18n")
     private fun getCurrentUser() {
         userCurrent = userPrefs.getInfoUser()
-        binding.imageViewAvatar.setImageBitmap(userCurrent.avatar?.let { base64ToBitmap(it) })
+        try {
+            val imageBytes = Base64.decode(userCurrent.avatar, Base64.DEFAULT)
+            val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            binding.imageViewAvatar.setImageBitmap(decodedImage)
+        }catch (e: java.lang.Exception){
+            Toast.makeText(context, "Cannot load image now", Toast.LENGTH_SHORT).show()
+        }
         binding.txtNameProfile.text = "${userCurrent.firstName} ${userCurrent.lastName}"
         getOwnerBlog()
     }

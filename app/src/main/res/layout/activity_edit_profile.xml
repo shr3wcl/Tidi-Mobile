@@ -27,6 +27,7 @@
                 android:src="@drawable/avatar"
                 android:background="@drawable/avatar_draw"/>
             <TextView
+                android:id="@+id/btnChangeAvatar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Edit"
@@ -38,6 +39,7 @@
                 android:layout_alignParentBottom="true"/>
         </RelativeLayout>
         <TextView
+            android:id="@+id/btnChangeBg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Edit"

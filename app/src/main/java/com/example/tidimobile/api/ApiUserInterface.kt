@@ -2,6 +2,7 @@ package com.example.tidimobile.api
 
 import com.example.tidimobile.model.ResponseMessage
 import com.example.tidimobile.model.UserChangedModel
+import com.example.tidimobile.model.UserEditResponse
 import com.example.tidimobile.model.UserLoginResponseModel
 import retrofit2.Call
 import retrofit2.http.Body
@@ -19,7 +20,7 @@ interface ApiUserInterface {
         @Path("idUser") idUser: String,
         @Header("token") authToken: String,
         @Body data: UserChangedModel
-    ): Call<UserChangedModel>
+    ): Call<UserEditResponse>
 
     @POST("/v1/user/change/password")
     fun changePassword(@Header("token") authToken: String): Call<ResponseMessage>

@@ -3,6 +3,7 @@ package com.example.tidimobile.storage
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.tidimobile.model.UserEditResponse
 import com.example.tidimobile.model.UserLoginResponseModel
 
 class UserPreferences(context: Context) {
@@ -46,6 +47,18 @@ class UserPreferences(context: Context) {
             )
     }
 
+    fun saveInfoEditor(userData: UserEditResponse.UserModelEdit){
+        val editor = preferences!!.edit()
+
+        editor.putString("firstName", userData.firstName)
+        editor.putString("lastName", userData.lastName)
+        editor.putString("email", userData.email)
+        editor.putString("gender", userData.gender)
+        editor.putString("bio", userData.bio)
+        editor.putString("birthday", userData.birthday)
+        editor.apply()
+
+    }
     @SuppressLint("CommitPrefEdits")
     fun clearInfo(){
         preferences!!.edit().clear().apply()

@@ -9,15 +9,14 @@ import android.os.Bundle
 import android.util.Base64
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tidimobile.api.ApiClient
 import com.example.tidimobile.api.ApiUserInterface
-import com.example.tidimobile.databinding.ActivityEditElementBinding
 import com.example.tidimobile.databinding.ActivityEditProfileBinding
+import com.example.tidimobile.dialog.GenderDialog
 import com.example.tidimobile.model.UserChangedModel
+import com.example.tidimobile.model.UserEditResponse
 import com.example.tidimobile.storage.TokenPreferences
 import com.example.tidimobile.storage.UserPreferences
 import retrofit2.Call
@@ -128,19 +127,20 @@ class EditProfileActivity : AppCompatActivity() {
 
         val user = UserChangedModel(firstName, lastName, email, gender, birthday, bio)
         val call = userService.changeInfoUser(userPrefs.getInfoUser()._id.toString(), "Bearer ${tokenPrefs.getToken()}", user)
-        call.enqueue(object : Callback<UserChangedModel> {
+        call.enqueue(object : Callback<UserEditResponse> {
             override fun onResponse(
-                call: Call<UserChangedModel>,
-                response: Response<UserChangedModel>
+                call: Call<UserEditResponse>,
+                response: Response<UserEditResponse>
             ) {
                 if (response.isSuccessful) {
+                    response.body()?.user?.let { userPrefs.saveInfoEditor(it) }
                     Toast.makeText(applicationContext, "Success", Toast.LENGTH_SHORT).show()
                 }else{
                     Toast.makeText(applicationContext, "An error occurred, please try again later!", Toast.LENGTH_LONG).show()
                 }
             }
 
-            override fun onFailure(call: Call<UserChangedModel>, t: Throwable) {
+            override fun onFailure(call: Call<UserEditResponse>, t: Throwable) {
                 Toast.makeText(applicationContext, "Failure", Toast.LENGTH_SHORT).show()
             }
         })

@@ -27,7 +27,7 @@ interface ApiBlogInterface {
     ): Call<ResponseMessage>
 
     @POST("/v1/user/blogs/edit/{idBlog}")
-    fun editBlog(@Header("token") authToken: String, @Body data: BlogModel): Call<ResponseMessage>
+    fun editBlog(@Header("token") authToken: String, @Body data: BlogModel.BlogObject, @Path("idBlog") idBlog: String): Call<ResponseMessage>
 
     @POST("/v1/user/blogs/like/{idBlog}")
     fun increaseLikeBlog(

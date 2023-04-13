@@ -29,10 +29,12 @@ data class BlogModel(
         val status: Boolean? = null,
         val createdAt: String? = null,
         val content: ContentObject? = null,
+        val description: String? = null
     ) {
         data class ContentObject(
             val time: String? = null,
-            val blocks: ArrayList<BlockObject>? = null
+            val blocks: ArrayList<BlockObject>? = null,
+            val version: String? = null
         ) {
             data class BlockObject(
                 val id: String? = null,
@@ -66,7 +68,7 @@ data class BlogModelDetail(
     val blog: BlogObject? = null
 ) {
     data class BlogObject(
-        val tag: ArrayList<String>?= null,
+        val tag: ArrayList<String>? = null,
         val _id: String? = null,
         val idUser: UserModel? = null,
         val title: String? = null,
@@ -83,7 +85,7 @@ data class BlogModelDetail(
 
         data class ContentObject(
             val time: String? = null,
-            val blocks: java.util.ArrayList<BlockObject>? =null
+            val blocks: java.util.ArrayList<BlockObject>? = null
         ) {
             data class BlockObject(
                 val id: String? = null,

@@ -48,3 +48,17 @@ data class UserChangedModel(
     val birthday: String? = null,
     val bio: String? = null,
 )
+
+data class UserEditResponse(
+    val user: UserModelEdit?=null,
+    val message: String?=null,
+){
+    data class UserModelEdit(
+        val firstName: String? = null,
+        val lastName: String? = null,
+        val email: String? = null,
+        val gender: String? = null,
+        val birthday: String? = null,
+        val bio: String? = null,
+    )
+}

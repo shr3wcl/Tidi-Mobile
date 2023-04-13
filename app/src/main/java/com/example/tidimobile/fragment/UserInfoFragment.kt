@@ -133,7 +133,12 @@ class UserInfoFragment :
                             val intent = Intent(context, BlogDetailActivity::class.java)
                             intent.putExtra("id", listBlog[position]._id)
                             intent.putExtra("title", listBlog[position].title)
-                            intent.putExtra("author", "${listBlog[position].idUser?.firstName} ${listBlog[position].idUser?.lastName}")
+                            intent.putExtra("description", listBlog[position].description)
+                            intent.putExtra(
+                                "author",
+                                "${listBlog[position].idUser?.firstName} ${listBlog[position].idUser?.lastName}"
+                            )
+                            intent.putExtra("idUser", listBlog[position].idUser?._id)
                             startActivity(intent)
                         }
 

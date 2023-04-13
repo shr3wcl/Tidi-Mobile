@@ -1,12 +1,11 @@
-package com.example.tidimobile
+package com.example.tidimobile.dialog
 
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.RadioGroup
-import android.widget.TextView
-import android.widget.Toast
+import com.example.tidimobile.R
 
 class GenderDialog(context: Context, val listener: GenderDialogListener) : Dialog(context) {
 

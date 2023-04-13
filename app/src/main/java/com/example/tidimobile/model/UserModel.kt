@@ -62,3 +62,12 @@ data class UserEditResponse(
         val bio: String? = null,
     )
 }
+
+data class UserChangePwdModel(
+    val oldPassword: String?= null,
+    val password: String?=null
+)
+
+data class AvatarModel(
+    val avatar: String?= null
+)

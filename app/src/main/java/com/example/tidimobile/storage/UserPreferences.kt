@@ -59,6 +59,12 @@ class UserPreferences(context: Context) {
         editor.apply()
 
     }
+
+    fun changeAvatar(avatar: String){
+        val editor = preferences!!.edit()
+        editor.putString("avatar", avatar)
+        editor.apply()
+    }
     @SuppressLint("CommitPrefEdits")
     fun clearInfo(){
         preferences!!.edit().clear().apply()

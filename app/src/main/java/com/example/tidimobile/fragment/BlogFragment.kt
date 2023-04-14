@@ -48,7 +48,7 @@ class BlogFragment : Fragment() {
                 R.id.item1 -> Toast.makeText(context, "Clicked 1", Toast.LENGTH_SHORT).show()
                 R.id.item2 -> {
                     parentFragmentManager.beginTransaction().hide(this@BlogFragment)
-                        .add(R.id.fragment_container, BlogFragment.newInstance())
+                        .add(R.id.fragment_container, newInstance())
                         .commit()
                 }
                 R.id.item3 -> {

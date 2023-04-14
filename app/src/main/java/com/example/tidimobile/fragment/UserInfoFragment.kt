@@ -2,10 +2,8 @@ package com.example.tidimobile.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.text.SpannableString
 import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.tidimobile.BlogDetailActivity
 import com.example.tidimobile.EditProfileActivity
 import com.example.tidimobile.R
@@ -51,6 +51,16 @@ class UserInfoFragment :
         menu.findItem(R.id.item1).title = "Edit Profile"
         menu.findItem(R.id.item2).title = "My Blog"
         menu.findItem(R.id.item3).title = "New Blog"
+        menu.findItem(R.id.item4).title = "Logout"
+        navView.setNavigationItemSelectedListener{
+            when(it.itemId){
+                R.id.item1 -> {}
+                R.id.item2 -> {}
+                R.id.item3 -> {}
+                R.id.item4 -> logout()
+            }
+            true
+        }
     }
 
     override fun onCreateView(
@@ -87,7 +97,8 @@ class UserInfoFragment :
         try {
             val imageBytes = Base64.decode(userCurrent.avatar, Base64.DEFAULT)
             val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            binding.imageViewAvatar.setImageBitmap(decodedImage)
+            Glide.with(this).load(decodedImage).diskCacheStrategy(
+                DiskCacheStrategy.ALL).circleCrop().into(binding.imageViewAvatar)
         }catch (e: java.lang.Exception){
             Toast.makeText(context, "Cannot load image now", Toast.LENGTH_SHORT).show()
         }
@@ -116,10 +127,10 @@ class UserInfoFragment :
 
         })
     }
-    private fun base64ToBitmap(base64String: String): Bitmap? {
-        val decodedString = Base64.decode(base64String.split(",")[1], Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
-    }
+//    private fun base64ToBitmap(base64String: String): Bitmap? {
+//        val decodedString = Base64.decode(base64String.split(",")[1], Base64.DEFAULT)
+//        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+//    }
 
     private fun getOwnerBlog(){
         binding.rcViewListBlog.visibility = View.GONE

@@ -12,6 +12,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.tidimobile.api.ApiAuthInterface
 import com.example.tidimobile.api.ApiClient
 import com.example.tidimobile.api.ApiUserInterface
@@ -154,7 +156,8 @@ class EditProfileActivity : AppCompatActivity() {
                     ) {
                         if(response.isSuccessful){
                             userPrefs.changeAvatar(avatar)
-                            binding.imageViewAvatar.setImageBitmap(base64ToBitmap(avatar))
+                            Glide.with(applicationContext).load(base64ToBitmap(avatar)).circleCrop().diskCacheStrategy(
+                                DiskCacheStrategy.ALL).into(binding.imageViewAvatar)
                             Toast.makeText(applicationContext, "Change Avatar Successfully", Toast.LENGTH_SHORT).show()
                         }else{
                             Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
@@ -234,6 +237,8 @@ class EditProfileActivity : AppCompatActivity() {
         val outputFormat = SimpleDateFormat("HH:mm:ss - dd/MM/yyyy")
         val dateFormat = outputFormat.format(date)
         try {
+            Glide.with(this).load(user.avatar?.let { base64ToBitmap(it) }).circleCrop().diskCacheStrategy(
+                DiskCacheStrategy.ALL).into(binding.imageViewAvatar)
             binding.imageViewAvatar.setImageBitmap(user.avatar?.let { base64ToBitmap(it) })
         }catch (e: java.lang.Exception){
             Toast.makeText(applicationContext, "Cannot load image now", Toast.LENGTH_SHORT).show()
@@ -303,12 +308,12 @@ class EditProfileActivity : AppCompatActivity() {
 
         })
     }
-    fun capitalizeWords(str: String): String {
+    private fun capitalizeWords(str: String): String {
         val words = str.split(" ")
         val capitalizedWords = mutableListOf<String>()
         for (word in words) {
             if (word.isNotEmpty()) {
-                val capitalizedWord = word.substring(0, 1).toUpperCase() + word.substring(1)
+                val capitalizedWord = word.substring(0, 1).uppercase(Locale.ROOT) + word.substring(1)
                 capitalizedWords.add(capitalizedWord)
             }
         }

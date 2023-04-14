@@ -62,4 +62,6 @@ dependencies {
     implementation 'io.github.upstarts:ejkit-moshi:2.0.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
     implementation 'com.squareup.moshi:moshi-kotlin:1.13.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
 }

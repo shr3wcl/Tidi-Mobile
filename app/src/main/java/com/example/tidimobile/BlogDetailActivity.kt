@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.webkit.WebView
@@ -15,9 +14,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import com.example.tidimobile.api.ApiBlogInterface
 import com.example.tidimobile.api.ApiClient
 import com.example.tidimobile.databinding.ActivityBlogDetailBinding
-import com.example.tidimobile.fragment.MyBlogFragment
+import com.example.tidimobile.model.ResponseMessage
+import com.example.tidimobile.storage.TokenPreferences
 import com.example.tidimobile.storage.UserPreferences
-import com.google.android.material.navigation.NavigationView
+import okhttp3.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class BlogDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBlogDetailBinding
@@ -27,16 +29,17 @@ class BlogDetailActivity : AppCompatActivity() {
     private lateinit var nameAuthor: String
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var userPrefs: UserPreferences
+    private lateinit var tokenPrefs: TokenPreferences
 
 
-    private var url: String = "https://7e7a-14-250-222-180.ngrok-free.app"
+    private var url: String = "https://278b-14-250-222-180.ngrok-free.app"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBlogDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         blogService = ApiClient.getBlog()
         userPrefs = UserPreferences(applicationContext)
-
+        tokenPrefs = TokenPreferences(applicationContext)
 //        supportActionBar?.hide()
         toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
         binding.drawerLayout.addDrawerListener(toggle)
@@ -65,11 +68,14 @@ class BlogDetailActivity : AppCompatActivity() {
                         intentT.putExtra("description", intent.getStringExtra("description").toString())
                         intentT.putExtra("idUser", idAuthor)
                         intentT.putExtra("nameAuthor", nameAuthor)
+                        intentT.putExtra("status", intent.getStringExtra("status"))
                         startActivity(Intent(intentT))
                     }
                     R.id.item2 -> Toast.makeText(applicationContext, "Clicked 2", Toast.LENGTH_SHORT).show()
                     R.id.item3 -> Toast.makeText(applicationContext, "Clicked 3", Toast.LENGTH_SHORT).show()
-                    R.id.item4 -> Toast.makeText(applicationContext, "Clicked 4", Toast.LENGTH_SHORT).show()
+                    R.id.item4 -> {
+                        deleteBlog()
+                    }
                 }
                 true
             }
@@ -83,6 +89,28 @@ class BlogDetailActivity : AppCompatActivity() {
         }
 
         getDetailBlog()
+    }
+
+    private fun deleteBlog() {
+        val call = blogService.deleteBlog("Bearer ${tokenPrefs.getToken()}", idBlog)
+        call.enqueue(object: Callback<ResponseMessage>{
+            override fun onResponse(
+                call: retrofit2.Call<ResponseMessage>,
+                response: Response<ResponseMessage>
+            ) {
+                if(response.isSuccessful){
+                    Toast.makeText(applicationContext, "Deleted", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                }else{
+                    Toast.makeText(applicationContext, response.body().toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<ResponseMessage>, t: Throwable) {
+                Toast.makeText(applicationContext, "Error, please try again later", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     @SuppressLint("SetJavaScriptEnabled")

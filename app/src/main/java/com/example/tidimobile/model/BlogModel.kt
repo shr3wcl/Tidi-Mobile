@@ -30,38 +30,7 @@ data class BlogModel(
         val createdAt: String? = null,
         val content: ContentObject? = null,
         val description: String? = null
-    ) {
-        data class ContentObject(
-            val time: String? = null,
-            val blocks: ArrayList<BlockObject>? = null,
-            val version: String? = null
-        ) {
-            data class BlockObject(
-                val id: String? = null,
-                val type: String? = null,
-                val data: DataObject? = null,
-                val tunes: TunesObject? = null,
-            ) {
-                data class DataObject(
-                    val text: String? = null,
-                    val level: Int? = null,
-                    val url: String? = null,
-                    val caption: String? = null,
-                    val withBorder: Boolean? = null,
-                    val withBackground: Boolean? = null,
-                    val stretched: Boolean? = null
-                )
-
-                data class TunesObject(
-                    val anyTuneName: AnyTuneNameObject? = null
-                ) {
-                    data class AnyTuneNameObject(
-                        val alignment: String? = null
-                    )
-                }
-            }
-        }
-    }
+    )
 }
 
 data class BlogModelDetail(
@@ -82,35 +51,43 @@ data class BlogModelDetail(
             val lastName: String? = null,
             val avatar: String? = null
         )
+    }
+}
 
-        data class ContentObject(
-            val time: String? = null,
-            val blocks: java.util.ArrayList<BlockObject>? = null
+data class BlogNewModel(
+    val idUser: String?=null,
+    val title: String?=null,
+    val content: ContentObject?=null,
+    val description: String?=null,
+    val status: Boolean?= null
+)
+
+data class ContentObject(
+    val time: String? = null,
+    val blocks: java.util.ArrayList<BlockObject>? = null
+) {
+    data class BlockObject(
+        val id: String? = null,
+        val type: String? = null,
+        val data: DataObject? = null,
+        val tunes: TunesObject? = null,
+    ) {
+        data class DataObject(
+            val text: String? = null,
+            val level: Int? = null,
+            val url: String? = null,
+            val caption: String? = null,
+            val withBorder: Boolean? = null,
+            val withBackground: Boolean? = null,
+            val stretched: Boolean? = null
+        )
+
+        data class TunesObject(
+            val anyTuneName: AnyTuneNameObject? = null
         ) {
-            data class BlockObject(
-                val id: String? = null,
-                val type: String? = null,
-                val data: DataObject? = null,
-                val tunes: TunesObject? = null,
-            ) {
-                data class DataObject(
-                    val text: String? = null,
-                    val level: Int? = null,
-                    val url: String? = null,
-                    val caption: String? = null,
-                    val withBorder: Boolean? = null,
-                    val withBackground: Boolean? = null,
-                    val stretched: Boolean? = null
-                )
-
-                data class TunesObject(
-                    val anyTuneName: AnyTuneNameObject? = null
-                ) {
-                    data class AnyTuneNameObject(
-                        val alignment: String? = null
-                    )
-                }
-            }
+            data class AnyTuneNameObject(
+                val alignment: String? = null
+            )
         }
     }
 }

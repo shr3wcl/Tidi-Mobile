@@ -3,15 +3,13 @@ package com.example.tidimobile.fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tidimobile.BlogDetailActivity
+import com.example.tidimobile.BlogNewActivity
 import com.example.tidimobile.R
 import com.example.tidimobile.adapter.BlogsAdapter
 import com.example.tidimobile.api.ApiBlogInterface
@@ -56,12 +54,14 @@ class BlogFragment : Fragment() {
                         .add(R.id.fragment_container, MyBlogFragment.newInstance())
                         .commit()
                 }
-                R.id.item4 -> Toast.makeText(context, "Clicked 4", Toast.LENGTH_SHORT).show()
+                R.id.item4 -> {
+                    startActivity(Intent(context, BlogNewActivity::class.java))
+                }
             }
             true
         }
     }
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -97,6 +97,7 @@ class BlogFragment : Fragment() {
                                 "${listBlog[position].idUser?.firstName} ${listBlog[position].idUser?.lastName}"
                             )
                             intent.putExtra("idUser", listBlog[position].idUser?._id)
+                            intent.putExtra("status", listBlog[position].status)
                             startActivity(intent)
                         }
 

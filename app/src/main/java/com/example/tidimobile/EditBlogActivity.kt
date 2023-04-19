@@ -18,6 +18,7 @@ import com.example.tidimobile.api.ApiClient
 import com.example.tidimobile.databinding.ActivityEditBlogBinding
 import com.example.tidimobile.dialog.BlogDialog
 import com.example.tidimobile.model.BlogModel
+import com.example.tidimobile.model.ContentObject
 import com.example.tidimobile.model.ResponseMessage
 import com.example.tidimobile.storage.TokenPreferences
 import com.google.gson.Gson
@@ -25,18 +26,19 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private lateinit var dataBlogSave: BlogModel.BlogObject.ContentObject
+private lateinit var dataBlogSave: ContentObject
 
 class EditBlogActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditBlogBinding
-    private var url: String = "https://7e7a-14-250-222-180.ngrok-free.app"
+    private var url: String = "https://278b-14-250-222-180.ngrok-free.app"
     private lateinit var idBlog: String
     private lateinit var titleBlog: String
     private lateinit var desBlog: String
     private lateinit var idUser: String
     private lateinit var tokenPrefs: TokenPreferences
     private lateinit var blogService: ApiBlogInterface
+    private var statusBlog = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,11 +50,13 @@ class EditBlogActivity : AppCompatActivity() {
         titleBlog = intent.getStringExtra("title").toString()
         desBlog = intent.getStringExtra("description").toString()
         idUser = intent.getStringExtra("idUser").toString()
+        statusBlog = when(intent.getStringExtra("status")){
+            "true" -> true
+            "false" -> false
+            else -> true
+        }
         tokenPrefs = TokenPreferences(applicationContext)
         title = "Edit blog"
-        findViewById<WebView>(R.id.wview).evaluateJavascript("dataChange"){value ->
-            Toast.makeText(applicationContext, value, Toast.LENGTH_SHORT).show()
-        }
         getDetailBlogToEdit()
         check()
     }
@@ -70,13 +74,14 @@ class EditBlogActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> {
                 val dialog = BlogDialog(this, object : BlogDialog.BlogDialogListener{
-                    override fun onBlogSelected(title: String, description: String, dataBlog: BlogModel.BlogObject.ContentObject) {
+                    override fun onBlogSelected(title: String, description: String, dataBlog: ContentObject, statBlog: Boolean) {
                         titleBlog = title
                         desBlog = description
                         dataBlogSave = dataBlog
+                        statusBlog = statBlog
                         saveBlog()
                     }
-                }, titleBlog, desBlog, dataBlogSave)
+                }, titleBlog, desBlog, dataBlogSave, statusBlog)
                 dialog.setCancelable(true)
                 dialog.show()
                 true
@@ -86,7 +91,7 @@ class EditBlogActivity : AppCompatActivity() {
     }
 
     private fun saveBlog(){
-        val blogEditedData = BlogModel.BlogObject(idBlog, idUser, titleBlog, true, null, dataBlogSave, desBlog)
+        val blogEditedData = BlogModel.BlogObject(idBlog, idUser, titleBlog, statusBlog, null, dataBlogSave, desBlog)
         val call = blogService.editBlog("Bearer ${tokenPrefs.getToken()}", blogEditedData, idBlog)
         call.enqueue(object : Callback<ResponseMessage> {
             override fun onResponse(
@@ -126,7 +131,7 @@ class EditBlogActivity : AppCompatActivity() {
         val webViewSetting = myWebView.settings
         webViewSetting.javaScriptEnabled = true
         webViewSetting.userAgentString = "User-agent"
-        myWebView.addJavascriptInterface(webAppInterface, "Android");
+        myWebView.addJavascriptInterface(webAppInterface, "Android")
 
         myWebView.webViewClient = object : WebViewClient() {
             @Deprecated("Deprecated in Java")
@@ -150,14 +155,13 @@ class EditBlogActivity : AppCompatActivity() {
 }
 
 class WebAppInterface(val context: Context) {
-    private var dataChangeValue: BlogModel.BlogObject.ContentObject? = null
+    private var dataChangeValue: ContentObject? = null
 
     @JavascriptInterface
     fun onDataChanged(dataChange: String) {
         val gson = Gson()
-        val topic = gson.fromJson(dataChange, BlogModel.BlogObject.ContentObject::class.java)
+        val topic = gson.fromJson(dataChange, ContentObject::class.java)
         dataChangeValue = topic
         dataBlogSave = topic
-        Toast.makeText(context, topic.time.toString(), Toast.LENGTH_SHORT).show()
     }
 }

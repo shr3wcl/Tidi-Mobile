@@ -23,7 +23,7 @@ interface ApiBlogInterface {
     @POST("/v1/user/blogs/store")
     fun saveNewBlog(
         @Header("token") authToken: String,
-        @Body data: BlogModel
+        @Body data: BlogNewModel
     ): Call<ResponseMessage>
 
     @POST("/v1/user/blogs/edit/{idBlog}")

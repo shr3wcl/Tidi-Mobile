@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.RadioGroup
 import com.example.tidimobile.R
 
-class GenderDialog(context: Context, val listener: GenderDialogListener) : Dialog(context) {
+class GenderDialog(context: Context, private val listener: GenderDialogListener) : Dialog(context) {
 
     private lateinit var genderRadioGroup: RadioGroup
     private lateinit var gender: String

@@ -10,11 +10,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tidimobile.BlogDetailActivity
-import com.example.tidimobile.R
 import com.example.tidimobile.adapter.BlogsAdapter
 import com.example.tidimobile.api.ApiBlogInterface
 import com.example.tidimobile.api.ApiClient
-import com.example.tidimobile.databinding.FragmentBlogBinding
 import com.example.tidimobile.databinding.FragmentMyBlogBinding
 import com.example.tidimobile.model.BlogModelBasic
 import com.example.tidimobile.storage.TokenPreferences

@@ -46,6 +46,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Status"/>
+            <RadioGroup
+                android:id="@+id/status_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/public_option"
+                    android:checked="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Public"/>
+
+                <RadioButton
+                    android:id="@+id/private_option"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Private"/>
+            </RadioGroup>
+        </LinearLayout>
     </LinearLayout>
 
     <Button

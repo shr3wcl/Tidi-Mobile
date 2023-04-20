@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tidimobile.api.ApiBlogInterface
 import com.example.tidimobile.api.ApiClient
+import com.example.tidimobile.api.Url
 import com.example.tidimobile.databinding.ActivityEditBlogBinding
 import com.example.tidimobile.dialog.BlogDialog
 import com.example.tidimobile.model.BlogModel
@@ -31,7 +32,7 @@ private lateinit var dataBlogSave: ContentObject
 class EditBlogActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditBlogBinding
-    private var url: String = "https://278b-14-250-222-180.ngrok-free.app"
+    private var url: String = Url().url
     private lateinit var idBlog: String
     private lateinit var titleBlog: String
     private lateinit var desBlog: String

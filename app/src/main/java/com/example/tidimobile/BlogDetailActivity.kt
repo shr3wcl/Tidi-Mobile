@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.example.tidimobile.api.ApiBlogInterface
 import com.example.tidimobile.api.ApiClient
+import com.example.tidimobile.api.Url
 import com.example.tidimobile.databinding.ActivityBlogDetailBinding
 import com.example.tidimobile.model.ResponseMessage
 import com.example.tidimobile.storage.TokenPreferences
@@ -32,7 +33,7 @@ class BlogDetailActivity : AppCompatActivity() {
     private lateinit var tokenPrefs: TokenPreferences
 
 
-    private var url: String = "https://278b-14-250-222-180.ngrok-free.app"
+    private var url: String = Url().url
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBlogDetailBinding.inflate(layoutInflater)

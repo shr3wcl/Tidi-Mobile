@@ -41,6 +41,10 @@ class BlogFragment : Fragment() {
         menu.findItem(R.id.item2).title = "All Blog"
         menu.findItem(R.id.item3).title = "My Blog"
         menu.findItem(R.id.item4).title = "New Blog"
+        menu.findItem(R.id.item1).isEnabled = true
+        menu.findItem(R.id.item2).isEnabled = true
+        menu.findItem(R.id.item3).isEnabled = true
+        menu.findItem(R.id.item4).isEnabled = true
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.item1 -> Toast.makeText(context, "Clicked 1", Toast.LENGTH_SHORT).show()

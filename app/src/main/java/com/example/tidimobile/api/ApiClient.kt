@@ -2,10 +2,11 @@ package com.example.tidimobile.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 class ApiClient {
     companion object {
-        private const val BASE_URL = "https://278b-14-250-222-180.ngrok-free.app"
+        private var BASE_URL = Url().url
         private var retrofit: Retrofit? = null
 
         fun getService(): ApiAuthInterface {
@@ -30,6 +31,22 @@ class ApiClient {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             return retrofit!!.create(ApiUserInterface::class.java)
+        }
+
+        fun getNotify(): ApiNoteInterface{
+            retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            return retrofit!!.create(ApiNoteInterface::class.java)
+        }
+
+        fun getSearch(): ApiSearchInterface{
+            retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            return retrofit!!.create(ApiSearchInterface::class.java)
         }
     }
 }

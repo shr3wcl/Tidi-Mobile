@@ -50,9 +50,9 @@ data class UserChangedModel(
 )
 
 data class UserEditResponse(
-    val user: UserModelEdit?=null,
-    val message: String?=null,
-){
+    val user: UserModelEdit? = null,
+    val message: String? = null,
+) {
     data class UserModelEdit(
         val firstName: String? = null,
         val lastName: String? = null,
@@ -64,10 +64,40 @@ data class UserEditResponse(
 }
 
 data class UserChangePwdModel(
-    val oldPassword: String?= null,
-    val password: String?=null
+    val oldPassword: String? = null,
+    val password: String? = null
 )
 
 data class AvatarModel(
-    val avatar: String?= null
+    val avatar: String? = null
 )
+
+//data class UserSearchModel(
+//    val users: ArrayList<UserSearch>? = null
+//) {
+//    data class UserSearch(
+//        val _id: String? = null,
+//        val firstName: String? = null,
+//        val lastName: String? = null
+//    )
+//}
+
+data class SearchModel(
+    val data: DataModel? = null
+) {
+    data class DataModel(
+        val blogs: ArrayList<BlogSearchModel>? = null,
+        val users: ArrayList<UserSearchModel>? = null
+    ) {
+        data class BlogSearchModel(
+            val _id: String? = null,
+            val title: String? = null
+        )
+
+        data class UserSearchModel(
+            val _id: String? = null,
+            val firstName: String? = null,
+            val lastName: String? = null,
+        )
+    }
+}

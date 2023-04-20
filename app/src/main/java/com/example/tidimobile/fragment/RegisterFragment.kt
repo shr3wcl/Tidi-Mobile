@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.tidimobile.R
 import com.example.tidimobile.api.ApiAuthInterface
 import com.example.tidimobile.api.ApiClient
@@ -28,6 +29,9 @@ class RegisterFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            title = "Register"
+        }
         menu = requireActivity().findViewById<NavigationView?>(R.id.navView).menu
         menu.findItem(R.id.item1).setOnMenuItemClickListener{
             callbackLogin()

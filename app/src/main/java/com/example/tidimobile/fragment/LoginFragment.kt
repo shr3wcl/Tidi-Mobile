@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.example.tidimobile.R
 import com.example.tidimobile.api.ApiAuthInterface
 import com.example.tidimobile.api.ApiBlogInterface
@@ -32,6 +33,9 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val navView: NavigationView = requireActivity().findViewById(R.id.navView)
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            title = "Login"
+        }
         menu = navView.menu
 
         menu.findItem(R.id.item1).title = "Login"

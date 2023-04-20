@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.example.tidimobile.R
 import com.example.tidimobile.databinding.FragmentNotifyBinding
 import com.google.android.material.navigation.NavigationView
@@ -21,7 +22,9 @@ class NotifyFragment : Fragment() {
         menu.findItem(R.id.item1).title = "Hello"
         menu.findItem(R.id.item2).title = "Hello"
         menu.findItem(R.id.item1).title = "Hello"
-
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            title = "Notify"
+        }
     }
 
     override fun onCreateView(

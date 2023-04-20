@@ -62,6 +62,11 @@ data class BlogNewModel(
     val status: Boolean?= null
 )
 
+//data class BlogSearchModel(
+//    val blogs: ArrayList<Title>?= null,
+//){
+//    data class Title(val id: String?= null,val title: String?=null)
+//}
 data class ContentObject(
     val time: String? = null,
     val blocks: java.util.ArrayList<BlockObject>? = null

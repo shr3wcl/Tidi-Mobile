@@ -8,6 +8,7 @@ import com.example.tidimobile.databinding.ActivityMainBinding
 import com.example.tidimobile.fragment.UserFragment
 import com.example.tidimobile.fragment.BlogFragment
 import com.example.tidimobile.fragment.NotifyFragment
+import com.example.tidimobile.fragment.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -24,15 +25,6 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-//        binding.navView.setNavigationItemSelectedListener {
-//            when(it.itemId){
-//                R.id.item1 -> Toast.makeText(applicationContext, "Clicked 1", Toast.LENGTH_SHORT).show()
-//                R.id.item2 -> Toast.makeText(applicationContext, "Clicked 2", Toast.LENGTH_SHORT).show()
-//                R.id.item3 -> Toast.makeText(applicationContext, "Clicked 3", Toast.LENGTH_SHORT).show()
-//                R.id.item4 -> Toast.makeText(applicationContext, "Clicked 4", Toast.LENGTH_SHORT).show()
-//            }
-//            true
-//        }
         title = "Blog"
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, BlogFragment.newInstance())
@@ -51,8 +43,13 @@ class MainActivity : AppCompatActivity() {
                     }
                     true
                 }
-                R.id.navigation_dashboard -> {
-                    title = "Dashboard"
+                R.id.navigation_search -> {
+                    title = "Search"
+                    supportFragmentManager.beginTransaction().apply {
+                        replace(R.id.fragment_container, SearchFragment.newInstance())
+                        addToBackStack(null)
+                        commit()
+                    }
                     true
                 }
                 R.id.navigation_notifications -> {

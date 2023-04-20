@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -47,7 +48,9 @@ class UserInfoFragment :
         super.onCreate(savedInstanceState)
         val navView: NavigationView = requireActivity().findViewById(R.id.navView)
         val menu: Menu = navView.menu
-
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            title = "User Information"
+        }
         menu.findItem(R.id.item1).title = "Edit Profile"
         menu.findItem(R.id.item2).title = "My Blog"
         menu.findItem(R.id.item3).title = "New Blog"
@@ -78,9 +81,9 @@ class UserInfoFragment :
         }else{
             getUserById(idUser)
         }
-        binding.btnLogout.setOnClickListener {
-            logout()
-        }
+//        binding.btnLogout.setOnClickListener {
+//            logout()
+//        }
         binding.editProfileIcon.setOnClickListener{
             startActivity(Intent(context, EditProfileActivity::class.java))
         }

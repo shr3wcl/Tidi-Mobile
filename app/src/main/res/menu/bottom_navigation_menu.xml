@@ -5,9 +5,9 @@
         android:title="Home"
         android:icon="@drawable/home"/>
     <item
-        android:id="@+id/navigation_dashboard"
-        android:title="Dashboard"
-        android:icon="@drawable/dboad"/>
+        android:id="@+id/navigation_search"
+        android:title="Search"
+        android:icon="@drawable/search"/>
     <item
         android:id="@+id/navigation_notifications"
         android:title="Notifications"

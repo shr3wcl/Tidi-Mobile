@@ -1,11 +1,13 @@
 package com.example.tidimobile.fragment
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tidimobile.R
 import com.example.tidimobile.api.ApiAuthInterface
@@ -80,6 +82,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginHandle() {
+        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view?.windowToken , 0)
         val username = binding.edtUsername.text.toString()
         val password = binding.edtPassword.text.toString()
         if (username.isEmpty()) {

@@ -33,12 +33,12 @@ class ApiClient {
             return retrofit!!.create(ApiUserInterface::class.java)
         }
 
-        fun getNotify(): ApiNoteInterface{
+        fun getNotify(): ApiNotify{
             retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-            return retrofit!!.create(ApiNoteInterface::class.java)
+            return retrofit!!.create(ApiNotify::class.java)
         }
 
         fun getSearch(): ApiSearchInterface{

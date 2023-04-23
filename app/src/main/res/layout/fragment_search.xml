@@ -31,22 +31,57 @@
             android:text="Search" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/landingImg"
-        android:layout_width="wrap_content"
+<!--    <ImageView-->
+<!--        android:id="@+id/landingImg"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/linearLayout"-->
+<!--        tools:src="@tools:sample/avatars" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcViewSearch"
+        android:layout_width="409dp"
+        android:visibility="visible"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginHorizontal="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        tools:src="@tools:sample/avatars" />
+        tools:listitem="@layout/blog_item_layout"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:visibility="gone"
-        android:layout_width="409dp"
-        android:layout_height="276dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/linearLayout">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/blogBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:textSize="16sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:text="TextView"-->
+<!--            android:background="@drawable/underline"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/userBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="16sp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center"-->
+<!--            android:text="TextView" />-->
+<!--    </LinearLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

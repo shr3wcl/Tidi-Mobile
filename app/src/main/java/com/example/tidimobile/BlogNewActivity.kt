@@ -15,11 +15,9 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import com.example.tidimobile.api.ApiBlogInterface
 import com.example.tidimobile.api.ApiClient
-import com.example.tidimobile.api.ApiUserInterface
 import com.example.tidimobile.api.Url
 import com.example.tidimobile.databinding.ActivityBlogNewBinding
 import com.example.tidimobile.dialog.BlogDialog
-import com.example.tidimobile.model.BlogModel
 import com.example.tidimobile.model.BlogNewModel
 import com.example.tidimobile.model.ContentObject
 import com.example.tidimobile.model.ResponseMessage
@@ -29,7 +27,6 @@ import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.properties.Delegates
 
 private lateinit var dataBlogSave: ContentObject
 

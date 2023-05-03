@@ -66,4 +66,9 @@ interface ApiBlogInterface {
         @Header("token") authToken: String,
         @Path("idComment") idComment: String
     ): Call<ResponseMessage>
+
+    @GET("/v1/user/blogs/overview/{idBlog}")
+    fun overViewBlog(
+        @Path("idBlog") idBlog: String
+    ): Call<BlogOverviewModel>
 }

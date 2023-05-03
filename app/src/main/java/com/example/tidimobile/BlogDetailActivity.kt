@@ -15,6 +15,7 @@ import com.example.tidimobile.api.ApiBlogInterface
 import com.example.tidimobile.api.ApiClient
 import com.example.tidimobile.api.Url
 import com.example.tidimobile.databinding.ActivityBlogDetailBinding
+import com.example.tidimobile.databinding.ActivityInfoBlogBinding
 import com.example.tidimobile.model.ResponseMessage
 import com.example.tidimobile.storage.TokenPreferences
 import com.example.tidimobile.storage.UserPreferences
@@ -57,13 +58,27 @@ class BlogDetailActivity : AppCompatActivity() {
         if(idAuthor == userPrefs.getInfoUser()._id){
             val intentT = Intent(applicationContext, EditBlogActivity::class.java)
 
-            binding.navView.menu.findItem(R.id.item1).title = "Edit"
-            binding.navView.menu.findItem(R.id.item2).title = "Like"
-            binding.navView.menu.findItem(R.id.item3).title = "Comment"
-            binding.navView.menu.findItem(R.id.item4).title = "Delete"
+            binding.navView.menu.findItem(R.id.item3).isEnabled = true
+            binding.navView.menu.findItem(R.id.item4).isEnabled = true
+            binding.navView.menu.findItem(R.id.item5).isEnabled = true
+
+            binding.navView.menu.findItem(R.id.item1).title = "Like"
+            binding.navView.menu.findItem(R.id.item2).title = "Comment"
+            binding.navView.menu.findItem(R.id.item3).title = "Info"
+            binding.navView.menu.findItem(R.id.item4).title = "Edit"
+            binding.navView.menu.findItem(R.id.item5).title = "Delete"
             binding.navView.setNavigationItemSelectedListener {
                 when(it.itemId){
                     R.id.item1 -> {
+                        handleLikeBlog()
+                    }
+                    R.id.item2 -> Toast.makeText(applicationContext, "Clicked 2", Toast.LENGTH_SHORT).show()
+                    R.id.item3 -> {
+                        val intentInfo = Intent(applicationContext, InfoBlogActivity::class.java)
+                        intentInfo.putExtra("idBlog", idBlog)
+                        startActivity(intentInfo)
+                    }
+                    R.id.item4 -> {
                         intentT.putExtra("id", idBlog)
                         intentT.putExtra("title", intent.getStringExtra("title").toString())
                         intentT.putExtra("description", intent.getStringExtra("description").toString())
@@ -72,21 +87,36 @@ class BlogDetailActivity : AppCompatActivity() {
                         intentT.putExtra("status", intent.getStringExtra("status"))
                         startActivity(Intent(intentT))
                     }
-                    R.id.item2 -> Toast.makeText(applicationContext, "Clicked 2", Toast.LENGTH_SHORT).show()
-                    R.id.item3 -> Toast.makeText(applicationContext, "Clicked 3", Toast.LENGTH_SHORT).show()
-                    R.id.item4 -> {
+                    R.id.item5 -> {
                         deleteBlog()
                     }
                 }
                 true
             }
         }else{
+            val intentT = Intent(applicationContext, EditBlogActivity::class.java)
             binding.navView.menu.findItem(R.id.item1).title = "Like"
             binding.navView.menu.findItem(R.id.item2).title = "Comment"
-            binding.navView.menu.findItem(R.id.item3).title = ""
-            binding.navView.menu.findItem(R.id.item3).isEnabled = false
+            binding.navView.menu.findItem(R.id.item3).title = "Info"
+            binding.navView.menu.findItem(R.id.item3).isEnabled = true
             binding.navView.menu.findItem(R.id.item4).title = ""
             binding.navView.menu.findItem(R.id.item4).isEnabled = false
+            binding.navView.menu.findItem(R.id.item5).title = ""
+            binding.navView.menu.findItem(R.id.item5).isEnabled = false
+            binding.navView.setNavigationItemSelectedListener {
+                when(it.itemId){
+                    R.id.item1 -> {
+                        handleLikeBlog()
+                    }
+                    R.id.item2 -> Toast.makeText(applicationContext, "Clicked 2", Toast.LENGTH_SHORT).show()
+                    R.id.item3 -> {
+                        val intentInfo = Intent(applicationContext, InfoBlogActivity::class.java)
+                        intentInfo.putExtra("idBlog", idBlog)
+                        startActivity(intentInfo)
+                    }
+                }
+                true
+            }
         }
 
         getDetailBlog()
@@ -114,6 +144,25 @@ class BlogDetailActivity : AppCompatActivity() {
         })
     }
 
+    private fun handleLikeBlog(){
+        blogService.increaseLikeBlog("Bearer ${tokenPrefs.getToken()}", idBlog)
+            .enqueue(object : Callback<ResponseMessage>{
+                override fun onResponse(
+                    call: retrofit2.Call<ResponseMessage>,
+                    response: Response<ResponseMessage>
+                ) {
+                    if(response.isSuccessful){
+                        val message = response.body()?.message
+                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(applicationContext, "Error, please try again!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: retrofit2.Call<ResponseMessage>, t: Throwable) {
+                    Toast.makeText(applicationContext, "Error, please try again!", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
     @SuppressLint("SetJavaScriptEnabled")
     private fun getDetailBlog() {
         binding.wview.visibility = View.GONE

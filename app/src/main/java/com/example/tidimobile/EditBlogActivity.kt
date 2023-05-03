@@ -26,8 +26,9 @@ import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.properties.Delegates
 
-private lateinit var dataBlogSave: ContentObject
+private var dataBlogSave = ContentObject()
 
 class EditBlogActivity : AppCompatActivity() {
 
@@ -39,7 +40,7 @@ class EditBlogActivity : AppCompatActivity() {
     private lateinit var idUser: String
     private lateinit var tokenPrefs: TokenPreferences
     private lateinit var blogService: ApiBlogInterface
-    private var statusBlog = true
+    private var statusBlog by Delegates.notNull<Boolean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -35,7 +35,7 @@ class BlogDialog(context: Context, private val listener: BlogDialogListener, pri
             status = when(statusRadioGroup.checkedRadioButtonId){
                 R.id.public_option -> true
                 R.id.private_option -> false
-                else -> true
+                else -> false
             }
             listener.onBlogSelected(titleBlog, desBlog, dataBlog, statusBlog)
 

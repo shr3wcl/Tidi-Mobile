@@ -76,11 +76,12 @@ class NotifyFragment : Fragment() {
 
                         })
                         binding.rcViewListNotify.adapter = nAdapter
-                        binding.rcViewListNotify.visibility = View.VISIBLE
-                        binding.tvLoading.visibility = View.GONE
+
                     }else{
                         Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                     }
+                    binding.rcViewListNotify.visibility = View.VISIBLE
+                    binding.tvLoading.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<NotifyModel>, t: Throwable) {

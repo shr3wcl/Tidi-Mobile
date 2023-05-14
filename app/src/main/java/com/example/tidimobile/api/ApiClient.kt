@@ -48,5 +48,13 @@ class ApiClient {
                 .build()
             return retrofit!!.create(ApiSearchInterface::class.java)
         }
+
+        fun getFollow(): ApiFollower{
+            retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            return retrofit!!.create(ApiFollower::class.java)
+        }
     }
 }

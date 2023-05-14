@@ -13,17 +13,20 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class BlogsAdapter(private var listBlogs: ArrayList<BlogModelBasic.BlogBasicObject>): RecyclerView.Adapter<BlogsAdapter.BlogViewHolder>() {
+class BlogsAdapter(private var listBlogs: ArrayList<BlogModelBasic.BlogBasicObject>) :
+    RecyclerView.Adapter<BlogsAdapter.BlogViewHolder>() {
     private lateinit var bListener: OnBlogClickListener
 
-    interface OnBlogClickListener{
+    interface OnBlogClickListener {
         fun onClickBlog(position: Int)
     }
 
-    fun setOnItemClickListener(clickListener: OnBlogClickListener){
+    fun setOnItemClickListener(clickListener: OnBlogClickListener) {
         bListener = clickListener
     }
-    class BlogViewHolder(itemView: View, clickListener: OnBlogClickListener): RecyclerView.ViewHolder(itemView){
+
+    class BlogViewHolder(itemView: View, clickListener: OnBlogClickListener) :
+        RecyclerView.ViewHolder(itemView) {
         init {
             itemView.setOnClickListener {
                 clickListener.onClickBlog(absoluteAdapterPosition)
@@ -32,7 +35,8 @@ class BlogsAdapter(private var listBlogs: ArrayList<BlogModelBasic.BlogBasicObje
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlogViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.blog_item_layout, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.blog_item_layout, parent, false)
         return BlogViewHolder(view, bListener)
     }
 
@@ -54,12 +58,12 @@ class BlogsAdapter(private var listBlogs: ArrayList<BlogModelBasic.BlogBasicObje
             val dateFormat = outputFormat.format(date)
             tvTitle.text = listBlogs[position].title
             tvDescription.text = listBlogs[position].description
-            tvAuthor.text = "${listBlogs[position].idUser?.firstName} ${listBlogs[position].idUser?.lastName}"
+            tvAuthor.text =
+                "${listBlogs[position].idUser?.firstName} ${listBlogs[position].idUser?.lastName}"
             tvTime.text = dateFormat
-            if(listBlogs[position].status == true){
+            if (listBlogs[position].status == true) {
                 tvStatus.text = "Public"
-            }
-            else {
+            } else {
                 tvStatus.text = "Private"
                 tvStatus.setBackgroundColor(Color.RED)
             }

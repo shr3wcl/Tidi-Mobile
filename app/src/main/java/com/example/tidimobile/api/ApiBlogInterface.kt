@@ -27,7 +27,11 @@ interface ApiBlogInterface {
     ): Call<ResponseMessage>
 
     @POST("/v1/user/blogs/edit/{idBlog}")
-    fun editBlog(@Header("token") authToken: String, @Body data: BlogModel.BlogObject, @Path("idBlog") idBlog: String): Call<ResponseMessage>
+    fun editBlog(
+        @Header("token") authToken: String,
+        @Body data: BlogModel.BlogObject,
+        @Path("idBlog") idBlog: String
+    ): Call<ResponseMessage>
 
     @POST("/v1/user/blogs/like/{idBlog}")
     fun increaseLikeBlog(
@@ -47,12 +51,13 @@ interface ApiBlogInterface {
     // Comment
 
     @GET("/v1/user/blogs/comment/{idBlog}")
-    fun getComments(@Path("idBlog") idBlog: String): Call<List<CommentModel>>
+    fun getComments(@Path("idBlog") idBlog: String): Call<ArrayList<CommentModel>>
 
-    @POST("/v1/user/comment/add/{idBlog}")
+    @POST("/v1/user/blogs/comment/add/{idBlog}")
     fun addNewComment(
         @Header("token") authToken: String,
-        @Path("idBlog") idBlog: String
+        @Body content: CommentNewModel,
+        @Path("idBlog") idBlog: String,
     ): Call<ResponseMessage>
 
     @DELETE("/v1/user/comment/{idComment}")
@@ -71,4 +76,7 @@ interface ApiBlogInterface {
     fun overViewBlog(
         @Path("idBlog") idBlog: String
     ): Call<BlogOverviewModel>
+
+    @GET("/v1/user/blogs/public/basic/owner/{idUser}")
+    fun getAllBlogOfUser(@Path("idUser") idUser: String): Call<BlogModelBasic>
 }

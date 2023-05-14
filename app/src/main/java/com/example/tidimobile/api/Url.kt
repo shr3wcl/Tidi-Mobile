@@ -1,5 +1,5 @@
 package com.example.tidimobile.api
 
 data class Url(
-    var url: String = "https://81e9-2001-ee0-4c18-74d0-558-ed41-4158-44f5.ngrok-free.app"
+    var url: String = "https://fed4-2a09-bac5-d41f-16d2-00-246-87.ngrok-free.app"
 )

@@ -20,6 +20,7 @@ import com.example.tidimobile.model.ResponseMessage
 import com.example.tidimobile.storage.TokenPreferences
 import com.example.tidimobile.storage.UserPreferences
 import okhttp3.Call
+import org.w3c.dom.Comment
 import retrofit2.Callback
 import retrofit2.Response
 
@@ -64,7 +65,7 @@ class BlogDetailActivity : AppCompatActivity() {
 
             binding.navView.menu.findItem(R.id.item1).title = "Like"
             binding.navView.menu.findItem(R.id.item2).title = "Comment"
-            binding.navView.menu.findItem(R.id.item3).title = "Info"
+            binding.navView.menu.findItem(R.id.item3).title = "Detail"
             binding.navView.menu.findItem(R.id.item4).title = "Edit"
             binding.navView.menu.findItem(R.id.item5).title = "Delete"
             binding.navView.setNavigationItemSelectedListener {
@@ -72,7 +73,11 @@ class BlogDetailActivity : AppCompatActivity() {
                     R.id.item1 -> {
                         handleLikeBlog()
                     }
-                    R.id.item2 -> Toast.makeText(applicationContext, "Clicked 2", Toast.LENGTH_SHORT).show()
+                    R.id.item2 -> {
+                        val intentComment = Intent(applicationContext, CommentActivity::class.java)
+                        intentComment.putExtra("idBlog", idBlog)
+                        startActivity(intentComment)
+                    }
                     R.id.item3 -> {
                         val intentInfo = Intent(applicationContext, InfoBlogActivity::class.java)
                         intentInfo.putExtra("idBlog", idBlog)

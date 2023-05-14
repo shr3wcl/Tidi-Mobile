@@ -283,8 +283,6 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun base64ToBitmap(base64String: String): Bitmap? {
-//        val decodedString = Base64.decode(base64String.split(",")[1], Base64.DEFAULT)
-//        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
         val imageBytes = Base64.decode(base64String, Base64.DEFAULT)
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }

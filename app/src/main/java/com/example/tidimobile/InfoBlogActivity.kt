@@ -41,6 +41,7 @@ class InfoBlogActivity : AppCompatActivity() {
         setContentView(binding.root)
         idBlog = intent.getStringExtra("idBlog").toString()
         blogService = ApiClient.getBlog()
+        title = "Detail Blog"
         getData()
     }
 
@@ -58,11 +59,15 @@ class InfoBlogActivity : AppCompatActivity() {
                         binding.tvAuthorName.text =
                             "${response.body()?.blog?.idUser?.firstName} ${response.body()?.blog?.idUser?.lastName}"
 
-                        Glide.with(applicationContext).load(base64ToBitmap(response.body()?.blog?.idUser?.avatar!!)).circleCrop().diskCacheStrategy(
-                            DiskCacheStrategy.ALL).into(binding.imgOVAuthor)
+                        Glide.with(applicationContext)
+                            .load(base64ToBitmap(response.body()?.blog?.idUser?.avatar!!))
+                            .circleCrop().diskCacheStrategy(
+                                DiskCacheStrategy.ALL
+                            ).into(binding.imgOVAuthor)
                         binding.imgOVAuthor.setImageBitmap(base64ToBitmap(response.body()?.blog?.idUser?.avatar!!))
                         val rawDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-                        val date: Date = response.body()?.blog?.createdAt!!.let { rawDateFormat.parse(it) } as Date
+                        val date: Date =
+                            response.body()?.blog?.createdAt!!.let { rawDateFormat.parse(it) } as Date
 //                        val outputFormat = SimpleDateFormat("HH:mm:ss - dd/MM/yyyy")
                         val outputFormat = SimpleDateFormat("dd/MM/yyyy")
                         val dateFormat = outputFormat.format(date)
@@ -77,8 +82,13 @@ class InfoBlogActivity : AppCompatActivity() {
                         lAdapter.setOnItemClickListener(object :
                             UserOVAdapter.OnUserOVClickListener {
                             override fun onClickUser(position: Int) {
-                                val intentUser = Intent(applicationContext, InfoUserActivity::class.java)
-                                intentUser.putExtra("idUser", response.body()?.blog?.idUser?._id)
+                                val intentUser =
+                                    Intent(applicationContext, InfoUserActivity::class.java)
+                                intentUser.putExtra("idUserBlog", listLiked[position].idUser?._id)
+                                intentUser.putExtra(
+                                    "name",
+                                    listLiked[position].idUser?.firstName + " " + listLiked[position].idUser?.lastName
+                                )
                                 startActivity(intentUser)
                             }
 
@@ -105,6 +115,7 @@ class InfoBlogActivity : AppCompatActivity() {
             })
 
     }
+
     private fun base64ToBitmap(base64String: String): Bitmap? {
 //        val decodedString = Base64.decode(base64String.split(",")[1], Base64.DEFAULT)
 //        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)

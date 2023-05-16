@@ -101,3 +101,18 @@ data class SearchModel(
         )
     }
 }
+
+data class UserInfoModel(
+    val user: UserModelEdit? = null,
+    val message: String? = null,
+) {
+    data class UserModelEdit(
+        val firstName: String? = null,
+        val lastName: String? = null,
+        val email: String? = null,
+        val gender: String? = null,
+        val birthday: String? = null,
+        val bio: String? = null,
+        val avatar: String? = null
+    )
+}

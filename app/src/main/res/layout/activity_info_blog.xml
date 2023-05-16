@@ -43,6 +43,7 @@
             android:text="Author: "
             android:textStyle="bold"/>
         <LinearLayout
+            android:id="@+id/author_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

@@ -33,6 +33,7 @@ class InfoBlogActivity : AppCompatActivity() {
     private lateinit var nameAuthor: String
     private lateinit var avatar: String
     private lateinit var date: String
+    private lateinit var idUser: String
     private lateinit var totalLike: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,12 @@ class InfoBlogActivity : AppCompatActivity() {
         blogService = ApiClient.getBlog()
         title = "Detail Blog"
         getData()
+        binding.authorBtn.setOnClickListener {
+            val intentT = Intent(applicationContext, InfoUserActivity::class.java)
+            intentT.putExtra("name", nameAuthor)
+            intentT.putExtra("idUserBlog", idUser)
+            startActivity(intentT)
+        }
     }
 
     private fun getData() {
@@ -56,6 +63,8 @@ class InfoBlogActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         binding.txtTitleOV.text = response.body()?.blog?.title!!
                         binding.txtDesOV.text = response.body()?.blog?.description!!
+                        nameAuthor = "${response.body()?.blog?.idUser?.firstName} ${response.body()?.blog?.idUser?.lastName}"
+                        idUser = response.body()?.blog?.idUser?._id.toString()
                         binding.tvAuthorName.text =
                             "${response.body()?.blog?.idUser?.firstName} ${response.body()?.blog?.idUser?.lastName}"
 

@@ -63,6 +63,8 @@ class UserInfoFragment :
         menu.findItem(R.id.item1).title = "Edit Profile"
         menu.findItem(R.id.item2).title = "My Blog"
         menu.findItem(R.id.item3).title = "New Blog"
+        menu.findItem(R.id.item3).isEnabled = true
+        menu.findItem(R.id.item4).isEnabled = true
         menu.findItem(R.id.item4).title = "Logout"
         navView.setNavigationItemSelectedListener{
             when(it.itemId){

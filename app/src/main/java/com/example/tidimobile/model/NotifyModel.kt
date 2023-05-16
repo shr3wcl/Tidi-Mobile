@@ -15,7 +15,6 @@ class NotifyModel(
 }
 
 class NotifyStoreModel(
-    val _id: String ?= null,
     val idUser: String ?= null,
     val content: String ?= null,
     val typeNotify: String? =null,

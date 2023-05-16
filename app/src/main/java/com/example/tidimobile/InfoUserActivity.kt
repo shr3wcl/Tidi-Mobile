@@ -1,13 +1,17 @@
 package com.example.tidimobile
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.tidimobile.adapter.BlogsAdapter
 import com.example.tidimobile.adapter.FollowAdapter
 import com.example.tidimobile.adapter.FollowingApdater
@@ -31,6 +35,7 @@ class InfoUserActivity : AppCompatActivity() {
     private lateinit var listBlog: ArrayList<BlogModelBasic.BlogBasicObject>
     private lateinit var listFollower: ArrayList<FollowModelGet.FollowersData>
     private lateinit var listFollowing: ArrayList<FollowingModelGet.FollowersData>
+    private lateinit var userCurrent: UserInfoModel.UserModelEdit
     private var checkFollow by Delegates.notNull<Boolean>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +74,52 @@ class InfoUserActivity : AppCompatActivity() {
             getDataFollower()
         }
         getDataFollower()
+        getInfoUser()
+    }
+
+    private fun getInfoUser() {
+        ApiClient.getUser().getInfoUser(idUser).enqueue(object : Callback<UserInfoModel> {
+            override fun onResponse(
+                call: Call<UserInfoModel>,
+                response: Response<UserInfoModel>
+            ) {
+                if (response.isSuccessful) {
+                    userCurrent = response.body()?.user!!
+                    try {
+                        val imageBytes = Base64.decode(userCurrent.avatar, Base64.DEFAULT)
+
+                        val decodedImage =
+                            BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        Glide.with(applicationContext).load(decodedImage).diskCacheStrategy(
+                            DiskCacheStrategy.ALL
+                        ).circleCrop().into(binding.imageViewAvatar)
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Cannot load image now",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        "Error, please try again later!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserInfoModel>, t: Throwable) {
+                Toast.makeText(
+                    applicationContext,
+                    "Error, please try again later!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+        })
+
+
     }
 
     private fun handleFollow() {
@@ -82,16 +133,51 @@ class InfoUserActivity : AppCompatActivity() {
                 call: Call<ResponseMessage>,
                 response: Response<ResponseMessage>
             ) {
-                if(response.isSuccessful){
-                    Toast.makeText(applicationContext, response.body()?.message, Toast.LENGTH_SHORT).show()
+                if (response.isSuccessful) {
+                    Toast.makeText(applicationContext, response.body()?.message, Toast.LENGTH_SHORT)
+                        .show()
                     binding.btnFollow.text = "Unfollow"
-                }else{
+                    val notify = NotifyStoreModel(
+                        idUser,
+                        "${intent.getStringExtra("name")} followed you",
+                        "Follow",
+                        UserPreferences(applicationContext).getInfoUser()._id,
+                        ""
+                    )
+                    ApiClient.getNotify().storeNotify(
+                        idUser,
+                        "Bearer ${TokenPreferences(applicationContext).getToken()}",
+                        notify
+                    ).enqueue(object : Callback<ResponseMessage> {
+                        override fun onResponse(
+                            call: retrofit2.Call<ResponseMessage>,
+                            response: Response<ResponseMessage>
+                        ) {
+                        }
+
+                        override fun onFailure(
+                            call: retrofit2.Call<ResponseMessage>,
+                            t: Throwable
+                        ) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Error 2",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                    })
+                } else {
                     Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ResponseMessage>, t: Throwable) {
-                Toast.makeText(applicationContext, "Error, please try again later!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Error, please try again later!",
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }
 
@@ -109,41 +195,51 @@ class InfoUserActivity : AppCompatActivity() {
                 call: Call<ResponseMessage>,
                 response: Response<ResponseMessage>
             ) {
-                if(response.isSuccessful){
-                    Toast.makeText(applicationContext, response.body()?.message, Toast.LENGTH_SHORT).show()
+                if (response.isSuccessful) {
+                    Toast.makeText(applicationContext, response.body()?.message, Toast.LENGTH_SHORT)
+                        .show()
                     binding.btnFollow.text = "Follow"
-                }else{
+                } else {
                     Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ResponseMessage>, t: Throwable) {
-                Toast.makeText(applicationContext, "Error, please try again later!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Error, please try again later!",
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }
 
         })
     }
+
     private fun getDataFollower() {
         binding.rcViewListBlog.visibility = View.GONE
         binding.rcViewListFollowing.visibility = View.GONE
         binding.rcViewListFollower.visibility = View.GONE
         binding.tvLoading.visibility = View.VISIBLE
         val call = followService.getAll(idUser)
-        call.enqueue(object : Callback<FollowModelGet>{
+        call.enqueue(object : Callback<FollowModelGet> {
             override fun onResponse(
                 call: Call<FollowModelGet>,
                 response: Response<FollowModelGet>
             ) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     listFollower = response.body()?.followers!!
-                    binding.rcViewListFollower.layoutManager = LinearLayoutManager(applicationContext)
+                    binding.rcViewListFollower.layoutManager =
+                        LinearLayoutManager(applicationContext)
                     val ferAdapter = FollowAdapter(listFollower)
-                    ferAdapter.setOnItemClickListener(object : FollowAdapter.OnFlwClickListener{
+                    ferAdapter.setOnItemClickListener(object : FollowAdapter.OnFlwClickListener {
                         override fun onClickFlw(position: Int) {
                             val intentUser =
                                 Intent(applicationContext, InfoUserActivity::class.java)
-                            intentUser.putExtra("idUser", listFollower[position].idFollow?._id.toString())
+                            intentUser.putExtra(
+                                "idUser",
+                                listFollower[position].idFollow?._id.toString()
+                            )
                             intentUser.putExtra(
                                 "name",
                                 listFollower[position].idFollow?.firstName.toString() + " " + listFollower[position].idFollow?.lastName.toString()
@@ -154,7 +250,7 @@ class InfoUserActivity : AppCompatActivity() {
                     })
                     binding.rcViewListFollower.adapter = ferAdapter
 
-                }else{
+                } else {
                     Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
                 }
                 binding.rcViewListFollower.visibility = View.VISIBLE
@@ -162,7 +258,11 @@ class InfoUserActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<FollowModelGet>, t: Throwable) {
-                Toast.makeText(applicationContext, "Error, please try again later!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Error, please try again later!",
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }
         })
@@ -174,20 +274,24 @@ class InfoUserActivity : AppCompatActivity() {
         binding.rcViewListFollowing.visibility = View.GONE
         binding.tvLoading.visibility = View.VISIBLE
         val call = followService.getAllFollowing(idUser)
-        call.enqueue(object : Callback<FollowingModelGet>{
+        call.enqueue(object : Callback<FollowingModelGet> {
             override fun onResponse(
                 call: Call<FollowingModelGet>,
                 response: Response<FollowingModelGet>
             ) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     listFollowing = response.body()?.followers!!
-                    binding.rcViewListFollowing.layoutManager = LinearLayoutManager(applicationContext)
+                    binding.rcViewListFollowing.layoutManager =
+                        LinearLayoutManager(applicationContext)
                     val ferAdapter = FollowingApdater(listFollowing)
-                    ferAdapter.setOnItemClickListener(object : FollowingApdater.OnFlwClickListener{
+                    ferAdapter.setOnItemClickListener(object : FollowingApdater.OnFlwClickListener {
                         override fun onClickFlw(position: Int) {
                             val intentUser =
                                 Intent(applicationContext, InfoUserActivity::class.java)
-                            intentUser.putExtra("idUser", listFollowing[position].idUser?._id.toString())
+                            intentUser.putExtra(
+                                "idUser",
+                                listFollowing[position].idUser?._id.toString()
+                            )
                             intentUser.putExtra(
                                 "name",
                                 listFollowing[position].idUser?.firstName.toString() + " " + listFollowing[position].idUser?.lastName.toString()
@@ -198,7 +302,7 @@ class InfoUserActivity : AppCompatActivity() {
                     })
                     binding.rcViewListFollowing.adapter = ferAdapter
 
-                }else{
+                } else {
                     Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
                 }
                 binding.rcViewListFollowing.visibility = View.VISIBLE
@@ -206,7 +310,11 @@ class InfoUserActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<FollowingModelGet>, t: Throwable) {
-                Toast.makeText(applicationContext, "Error, please try again later!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Error, please try again later!",
+                    Toast.LENGTH_SHORT
+                ).show()
 
             }
         })

@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CommentActivity"
     android:orientation="vertical"
-    android:layout_marginTop="1dp">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcViewListComment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:layout_marginTop="10dp"
-        android:background="#DCDCDC"
-        tools:listitem="@layout/comment_item" />
+    android:layout_marginTop="1dp"
+    android:background="@android:color/darker_gray">
 
     <TextView
         android:id="@+id/tvLoading"
@@ -28,25 +20,47 @@
         android:textSize="28sp"
         android:textStyle="bold"
         android:visibility="gone" />
+
     <LinearLayout
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcViewListComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#DCDCDC"
+            android:layout_marginBottom="60dp"
+            tools:listitem="@layout/comment_item" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent">
+
         <EditText
             android:id="@+id/edTextCmt"
-            android:layout_marginHorizontal="10dp"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:hint="What are you thinking ...               "/>
-        <Button
-            android:layout_gravity="end"
-            android:id="@+id/btnSendCmt"
             android:layout_marginHorizontal="10dp"
+            android:hint="What are you thinking ...               " />
+
+        <Button
+            android:id="@+id/btnSendCmt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send"/>
+            android:layout_gravity="end"
+            android:layout_marginHorizontal="10dp"
+            android:text="Send" />
     </LinearLayout>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

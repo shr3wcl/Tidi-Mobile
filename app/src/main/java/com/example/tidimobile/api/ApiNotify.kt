@@ -14,6 +14,6 @@ interface ApiNotify {
     @GET("/v1/user/notify/get")
     fun getNotify(@Header("token") token: String): Call<NotifyModel>
 
-    @POST("/v1/user/notify/store")
+    @POST("/v1/user/notify/store/{idUser}")
     fun storeNotify(@Path("idUser") idUser: String, @Header("token") token: String, @Body data: NotifyStoreModel): Call<ResponseMessage>
 }

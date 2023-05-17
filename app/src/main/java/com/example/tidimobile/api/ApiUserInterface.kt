@@ -10,7 +10,7 @@ import retrofit2.http.Path
 
 interface ApiUserInterface {
     @GET("/v1/user/info/{idUser}")
-    fun getInfoUser(@Path("idUser") idUser: String): Call<UserLoginResponseModel>
+    fun getInfoUser(@Path("idUser") idUser: String): Call<UserInfoModel>
 
     @POST("/v1/user/edit/{idUser}")
     fun changeInfoUser(

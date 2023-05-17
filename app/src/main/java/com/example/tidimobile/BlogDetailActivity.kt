@@ -16,6 +16,7 @@ import com.example.tidimobile.api.ApiClient
 import com.example.tidimobile.api.Url
 import com.example.tidimobile.databinding.ActivityBlogDetailBinding
 import com.example.tidimobile.databinding.ActivityInfoBlogBinding
+import com.example.tidimobile.model.NotifyStoreModel
 import com.example.tidimobile.model.ResponseMessage
 import com.example.tidimobile.storage.TokenPreferences
 import com.example.tidimobile.storage.UserPreferences
@@ -56,7 +57,7 @@ class BlogDetailActivity : AppCompatActivity() {
         idAuthor = intent.getStringExtra("idUser").toString()
         nameAuthor = intent.getStringExtra("idUser").toString()
 
-        if(idAuthor == userPrefs.getInfoUser()._id){
+        if (idAuthor == userPrefs.getInfoUser()._id) {
             val intentT = Intent(applicationContext, EditBlogActivity::class.java)
 
             binding.navView.menu.findItem(R.id.item3).isEnabled = true
@@ -69,13 +70,14 @@ class BlogDetailActivity : AppCompatActivity() {
             binding.navView.menu.findItem(R.id.item4).title = "Edit"
             binding.navView.menu.findItem(R.id.item5).title = "Delete"
             binding.navView.setNavigationItemSelectedListener {
-                when(it.itemId){
+                when (it.itemId) {
                     R.id.item1 -> {
                         handleLikeBlog()
                     }
                     R.id.item2 -> {
                         val intentComment = Intent(applicationContext, CommentActivity::class.java)
                         intentComment.putExtra("idBlog", idBlog)
+                        intentComment.putExtra("idAuthor", idAuthor)
                         startActivity(intentComment)
                     }
                     R.id.item3 -> {
@@ -86,7 +88,10 @@ class BlogDetailActivity : AppCompatActivity() {
                     R.id.item4 -> {
                         intentT.putExtra("id", idBlog)
                         intentT.putExtra("title", intent.getStringExtra("title").toString())
-                        intentT.putExtra("description", intent.getStringExtra("description").toString())
+                        intentT.putExtra(
+                            "description",
+                            intent.getStringExtra("description").toString()
+                        )
                         intentT.putExtra("idUser", idAuthor)
                         intentT.putExtra("nameAuthor", nameAuthor)
                         intentT.putExtra("status", intent.getStringExtra("status"))
@@ -98,7 +103,7 @@ class BlogDetailActivity : AppCompatActivity() {
                 }
                 true
             }
-        }else{
+        } else {
             val intentT = Intent(applicationContext, EditBlogActivity::class.java)
             binding.navView.menu.findItem(R.id.item1).title = "Like"
             binding.navView.menu.findItem(R.id.item2).title = "Comment"
@@ -109,11 +114,15 @@ class BlogDetailActivity : AppCompatActivity() {
             binding.navView.menu.findItem(R.id.item5).title = ""
             binding.navView.menu.findItem(R.id.item5).isEnabled = false
             binding.navView.setNavigationItemSelectedListener {
-                when(it.itemId){
+                when (it.itemId) {
                     R.id.item1 -> {
                         handleLikeBlog()
                     }
-                    R.id.item2 -> Toast.makeText(applicationContext, "Clicked 2", Toast.LENGTH_SHORT).show()
+                    R.id.item2 -> {
+                        val intentComment = Intent(applicationContext, CommentActivity::class.java)
+                        intentComment.putExtra("idBlog", idBlog)
+                        startActivity(intentComment)
+                    }
                     R.id.item3 -> {
                         val intentInfo = Intent(applicationContext, InfoBlogActivity::class.java)
                         intentInfo.putExtra("idBlog", idBlog)
@@ -129,45 +138,91 @@ class BlogDetailActivity : AppCompatActivity() {
 
     private fun deleteBlog() {
         val call = blogService.deleteBlog("Bearer ${tokenPrefs.getToken()}", idBlog)
-        call.enqueue(object: Callback<ResponseMessage>{
+        call.enqueue(object : Callback<ResponseMessage> {
             override fun onResponse(
                 call: retrofit2.Call<ResponseMessage>,
                 response: Response<ResponseMessage>
             ) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     Toast.makeText(applicationContext, "Deleted", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(applicationContext, MainActivity::class.java))
-                }else{
-                    Toast.makeText(applicationContext, response.body().toString(), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        response.body().toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             override fun onFailure(call: retrofit2.Call<ResponseMessage>, t: Throwable) {
-                Toast.makeText(applicationContext, "Error, please try again later", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Error, please try again later",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         })
     }
 
-    private fun handleLikeBlog(){
+    private fun handleLikeBlog() {
         blogService.increaseLikeBlog("Bearer ${tokenPrefs.getToken()}", idBlog)
-            .enqueue(object : Callback<ResponseMessage>{
+            .enqueue(object : Callback<ResponseMessage> {
                 override fun onResponse(
                     call: retrofit2.Call<ResponseMessage>,
                     response: Response<ResponseMessage>
                 ) {
-                    if(response.isSuccessful){
+                    if (response.isSuccessful) {
                         val message = response.body()?.message
+                        val notify = NotifyStoreModel(
+                            idAuthor,
+                            "${userPrefs.getInfoUser().firstName} ${userPrefs.getInfoUser().lastName} liked your blog",
+                            "Blog",
+                            userPrefs.getInfoUser()._id,
+                            idBlog
+                        )
+                        ApiClient.getNotify()
+                            .storeNotify(idAuthor, "Bearer ${tokenPrefs.getToken()}", notify)
+                            .enqueue(object : Callback<ResponseMessage> {
+                                override fun onResponse(
+                                    call: retrofit2.Call<ResponseMessage>,
+                                    response: Response<ResponseMessage>
+                                ) {
+                                }
+
+                                override fun onFailure(
+                                    call: retrofit2.Call<ResponseMessage>,
+                                    t: Throwable
+                                ) {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Error 2",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                            })
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(applicationContext, "Error, please try again!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            "Error, please try again!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
+
                 override fun onFailure(call: retrofit2.Call<ResponseMessage>, t: Throwable) {
-                    Toast.makeText(applicationContext, "Error, please try again!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext,
+                        "Error, please try again!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
     }
+
     @SuppressLint("SetJavaScriptEnabled")
     private fun getDetailBlog() {
         binding.wview.visibility = View.GONE
@@ -193,8 +248,9 @@ class BlogDetailActivity : AppCompatActivity() {
         myWebView.loadUrl("$url/get/${idBlog}")
 
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(toggle.onOptionsItemSelected(item)){
+        if (toggle.onOptionsItemSelected(item)) {
             return true
         }
         return super.onOptionsItemSelected(item)

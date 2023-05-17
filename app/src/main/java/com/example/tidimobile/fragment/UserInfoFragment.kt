@@ -22,7 +22,7 @@ import com.example.tidimobile.InfoUserActivity
 import com.example.tidimobile.R
 import com.example.tidimobile.adapter.BlogsAdapter
 import com.example.tidimobile.adapter.FollowAdapter
-import com.example.tidimobile.adapter.FollowingApdater
+import com.example.tidimobile.adapter.FollowingAdapter
 import com.example.tidimobile.api.ApiAuthInterface
 import com.example.tidimobile.api.ApiBlogInterface
 import com.example.tidimobile.api.ApiClient
@@ -66,9 +66,11 @@ class UserInfoFragment :
         menu.findItem(R.id.item3).isEnabled = true
         menu.findItem(R.id.item4).isEnabled = true
         menu.findItem(R.id.item4).title = "Logout"
-        navView.setNavigationItemSelectedListener{
-            when(it.itemId){
-                R.id.item1 -> {startActivity(Intent(context, EditProfileActivity::class.java))}
+        navView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.item1 -> {
+                    startActivity(Intent(context, EditProfileActivity::class.java))
+                }
                 R.id.item2 -> {}
                 R.id.item3 -> {}
                 R.id.item4 -> logout()
@@ -88,9 +90,9 @@ class UserInfoFragment :
         userPrefs = UserPreferences(inflater.context)
         blogService = ApiClient.getBlog()
         val idUser = arguments?.getString("idUserToGetInfo")
-        if(idUser?.isEmpty() == true || idUser == null){
+        if (idUser?.isEmpty() == true || idUser == null) {
             getCurrentUser()
-        }else{
+        } else {
             getUserById(idUser)
         }
         binding.tvBlogBtn.setOnClickListener {
@@ -111,7 +113,7 @@ class UserInfoFragment :
             binding.tvFollowingBtn.setBackgroundColor(Color.WHITE)
             getDataFollower()
         }
-        binding.editProfileIcon.setOnClickListener{
+        binding.editProfileIcon.setOnClickListener {
             startActivity(Intent(context, EditProfileActivity::class.java))
         }
         return binding.root
@@ -128,8 +130,9 @@ class UserInfoFragment :
             val imageBytes = Base64.decode(userCurrent.avatar, Base64.DEFAULT)
             val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             Glide.with(this).load(decodedImage).diskCacheStrategy(
-                DiskCacheStrategy.ALL).circleCrop().into(binding.imageViewAvatar)
-        }catch (e: java.lang.Exception){
+                DiskCacheStrategy.ALL
+            ).circleCrop().into(binding.imageViewAvatar)
+        } catch (e: java.lang.Exception) {
             Toast.makeText(context, "Cannot load image now", Toast.LENGTH_SHORT).show()
         }
         binding.txtNameProfile.text = "${userCurrent.firstName} ${userCurrent.lastName}"
@@ -162,7 +165,7 @@ class UserInfoFragment :
 //        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
 //    }
 
-    private fun getOwnerBlog(){
+    private fun getOwnerBlog() {
         binding.rcViewListBlog.visibility = View.GONE
         binding.tvLoading.visibility = View.VISIBLE
         val call = blogService.getAllBlogOfaUser("Bearer ${tokenPrefs.getToken()}")
@@ -171,11 +174,11 @@ class UserInfoFragment :
                 call: Call<BlogModelBasic>,
                 response: Response<BlogModelBasic>
             ) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     listBlog = response.body()?.blogs!!
                     binding.rcViewListBlog.layoutManager = LinearLayoutManager(requireContext())
                     val bAdapter = BlogsAdapter(listBlog)
-                    bAdapter.setOnItemClickListener(object : BlogsAdapter.OnBlogClickListener{
+                    bAdapter.setOnItemClickListener(object : BlogsAdapter.OnBlogClickListener {
                         override fun onClickBlog(position: Int) {
                             val intent = Intent(context, BlogDetailActivity::class.java)
                             intent.putExtra("id", listBlog[position]._id)
@@ -210,20 +213,23 @@ class UserInfoFragment :
         binding.rcViewListFollower.visibility = View.GONE
         binding.tvLoading.visibility = View.VISIBLE
         val call = followService.getAll(userCurrent._id.toString())
-        call.enqueue(object : Callback<FollowModelGet>{
+        call.enqueue(object : Callback<FollowModelGet> {
             override fun onResponse(
                 call: Call<FollowModelGet>,
                 response: Response<FollowModelGet>
             ) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     listFollower = response.body()?.followers!!
                     binding.rcViewListFollower.layoutManager = LinearLayoutManager(context)
                     val ferAdapter = FollowAdapter(listFollower)
-                    ferAdapter.setOnItemClickListener(object : FollowAdapter.OnFlwClickListener{
+                    ferAdapter.setOnItemClickListener(object : FollowAdapter.OnFlwClickListener {
                         override fun onClickFlw(position: Int) {
                             val intentUser =
                                 Intent(context, InfoUserActivity::class.java)
-                            intentUser.putExtra("idUserBlog", listFollower[position].idFollow?._id.toString())
+                            intentUser.putExtra(
+                                "idUserBlog",
+                                listFollower[position].idFollow?._id.toString()
+                            )
                             intentUser.putExtra(
                                 "name",
                                 listFollower[position].idFollow?.firstName.toString() + " " + listFollower[position].idFollow?.lastName.toString()
@@ -233,7 +239,7 @@ class UserInfoFragment :
                     })
                     binding.rcViewListFollower.adapter = ferAdapter
 
-                }else{
+                } else {
                     Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                 }
                 binding.rcViewListFollower.visibility = View.VISIBLE
@@ -253,20 +259,23 @@ class UserInfoFragment :
         binding.rcViewListFollowing.visibility = View.GONE
         binding.tvLoading.visibility = View.VISIBLE
         val call = followService.getAllFollowing(userCurrent._id.toString())
-        call.enqueue(object : Callback<FollowingModelGet>{
+        call.enqueue(object : Callback<FollowingModelGet> {
             override fun onResponse(
                 call: Call<FollowingModelGet>,
                 response: Response<FollowingModelGet>
             ) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     listFollowing = response.body()?.followers!!
                     binding.rcViewListFollowing.layoutManager = LinearLayoutManager(context)
-                    val ferAdapter = FollowingApdater(listFollowing)
-                    ferAdapter.setOnItemClickListener(object : FollowingApdater.OnFlwClickListener{
+                    val ferAdapter = FollowingAdapter(listFollowing)
+                    ferAdapter.setOnItemClickListener(object : FollowingAdapter.OnFlwClickListener {
                         override fun onClickFlw(position: Int) {
                             val intentUser =
                                 Intent(context, InfoUserActivity::class.java)
-                            intentUser.putExtra("idUserBlog", listFollowing[position].idUser?._id.toString())
+                            intentUser.putExtra(
+                                "idUserBlog",
+                                listFollowing[position].idUser?._id.toString()
+                            )
                             intentUser.putExtra(
                                 "name",
                                 listFollowing[position].idUser?.firstName.toString() + " " + listFollowing[position].idUser?.lastName.toString()
@@ -277,7 +286,7 @@ class UserInfoFragment :
                     })
                     binding.rcViewListFollowing.adapter = ferAdapter
 
-                }else{
+                } else {
                     Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                 }
                 binding.rcViewListFollowing.visibility = View.VISIBLE
@@ -290,6 +299,7 @@ class UserInfoFragment :
             }
         })
     }
+
     companion object {
         fun newInstance(): UserInfoFragment = UserInfoFragment()
     }

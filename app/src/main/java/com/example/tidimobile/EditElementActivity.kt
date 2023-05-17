@@ -20,6 +20,7 @@ class EditElementActivity : AppCompatActivity() {
             binding.editText.setText("")
         }
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_item, menu)
         return true

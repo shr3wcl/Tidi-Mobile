@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tidimobile.R
-import com.example.tidimobile.model.FollowModelGet
 import com.example.tidimobile.model.FollowingModelGet
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class FollowingApdater(private var listFollow: ArrayList<FollowingModelGet.FollowersData>) :
-    RecyclerView.Adapter<FollowingApdater.FollowViewHolder>() {
+class FollowingAdapter(private var listFollow: ArrayList<FollowingModelGet.FollowersData>) :
+    RecyclerView.Adapter<FollowingAdapter.FollowViewHolder>() {
 
     private lateinit var cListener: OnFlwClickListener
 
@@ -50,7 +49,8 @@ class FollowingApdater(private var listFollow: ArrayList<FollowingModelGet.Follo
             findViewById<TextView>(R.id.txtNameUserItemOV).text =
                 listFollow[position].idUser?.firstName + " " + listFollow[position].idUser?.lastName
             val rawDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-            val date: Date = listFollow[position].idUser?.createdAt?.let { rawDateFormat.parse(it) } as Date
+            val date: Date =
+                listFollow[position].idUser?.createdAt?.let { rawDateFormat.parse(it) } as Date
             val outputFormat = SimpleDateFormat("HH:mm:ss - dd/MM/yyyy")
             val dateFormat = outputFormat.format(date)
             findViewById<TextView>(R.id.dateLiked).text = dateFormat

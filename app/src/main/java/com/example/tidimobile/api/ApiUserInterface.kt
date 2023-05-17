@@ -20,8 +20,14 @@ interface ApiUserInterface {
     ): Call<UserEditResponse>
 
     @POST("/v1/user/change/password")
-    fun changePassword(@Header("token") authToken: String, @Body data: UserChangePwdModel): Call<ResponseMessage>
+    fun changePassword(
+        @Header("token") authToken: String,
+        @Body data: UserChangePwdModel
+    ): Call<ResponseMessage>
 
     @POST("/v1/user/change/avatar")
-    fun changeAvatar(@Header("token") authToken: String, @Body data: AvatarModel): Call<ResponseMessage>
+    fun changeAvatar(
+        @Header("token") authToken: String,
+        @Body data: AvatarModel
+    ): Call<ResponseMessage>
 }

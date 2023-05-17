@@ -1,18 +1,12 @@
 package com.example.tidimobile.adapter
 
 import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.tidimobile.R
-import com.example.tidimobile.model.CommentModel
 import com.example.tidimobile.model.FollowModelGet
 import java.text.SimpleDateFormat
 import java.util.*
@@ -55,7 +49,8 @@ class FollowAdapter(private var listFollow: ArrayList<FollowModelGet.FollowersDa
             findViewById<TextView>(R.id.txtNameUserItemOV).text =
                 listFollow[position].idFollow?.firstName + " " + listFollow[position].idFollow?.lastName
             val rawDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-            val date: Date = listFollow[position].idFollow?.createdAt?.let { rawDateFormat.parse(it) } as Date
+            val date: Date =
+                listFollow[position].idFollow?.createdAt?.let { rawDateFormat.parse(it) } as Date
             val outputFormat = SimpleDateFormat("HH:mm:ss - dd/MM/yyyy")
             val dateFormat = outputFormat.format(date)
             findViewById<TextView>(R.id.dateLiked).text = dateFormat

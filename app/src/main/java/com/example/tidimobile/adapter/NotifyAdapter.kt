@@ -8,28 +8,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tidimobile.R
 import com.example.tidimobile.model.NotifyModel
 
-class NotifyAdapter(private var listNotify: ArrayList<NotifyModel.SubNotifyModel>):
+class NotifyAdapter(private var listNotify: ArrayList<NotifyModel.SubNotifyModel>) :
     RecyclerView.Adapter<NotifyAdapter.NotifyViewHolder>() {
-    private lateinit var nListener: NotifyAdapter.OnClickNotifyListener
+    private lateinit var nListener: OnClickNotifyListener
 
-    interface OnClickNotifyListener{
+    interface OnClickNotifyListener {
         fun onClickNotify(position: Int)
     }
 
-    fun setOnClickItemListener(clickListener: OnClickNotifyListener){
+    fun setOnClickItemListener(clickListener: OnClickNotifyListener) {
         nListener = clickListener
     }
 
-    class NotifyViewHolder(itemView: View, clickListener: OnClickNotifyListener): RecyclerView.ViewHolder(itemView){
+    class NotifyViewHolder(itemView: View, clickListener: OnClickNotifyListener) :
+        RecyclerView.ViewHolder(itemView) {
         init {
-            itemView.setOnClickListener{
+            itemView.setOnClickListener {
                 clickListener.onClickNotify(absoluteAdapterPosition)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotifyViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.notify_item_layout, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.notify_item_layout, parent, false)
         return NotifyViewHolder(view, nListener)
     }
 

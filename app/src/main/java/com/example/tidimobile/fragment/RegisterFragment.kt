@@ -33,7 +33,7 @@ class RegisterFragment : Fragment() {
             title = "Register"
         }
         menu = requireActivity().findViewById<NavigationView?>(R.id.navView).menu
-        menu.findItem(R.id.item1).setOnMenuItemClickListener{
+        menu.findItem(R.id.item1).setOnMenuItemClickListener {
             callbackLogin()
             true
         }
@@ -113,6 +113,9 @@ class RegisterFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.beginTransaction().hide(this@RegisterFragment)
+                        .add(R.id.fragment_container_user, LoginFragment.newInstance())
+                        .commit()
                 }
             }
 

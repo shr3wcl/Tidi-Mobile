@@ -59,16 +59,19 @@ class MyBlogFragment : Fragment() {
                 call: Call<BlogModelBasic>,
                 response: Response<BlogModelBasic>
             ) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     listBlog = response.body()?.blogs!!
                     binding.rcViewListBlog.layoutManager = LinearLayoutManager(requireContext())
                     val bAdapter = BlogsAdapter(listBlog)
-                    bAdapter.setOnItemClickListener(object : BlogsAdapter.OnBlogClickListener{
+                    bAdapter.setOnItemClickListener(object : BlogsAdapter.OnBlogClickListener {
                         override fun onClickBlog(position: Int) {
                             val intent = Intent(context, BlogDetailActivity::class.java)
                             intent.putExtra("id", listBlog[position]._id)
                             intent.putExtra("title", listBlog[position].title)
-                            intent.putExtra("author", "${listBlog[position].idUser?.firstName} ${listBlog[position].idUser?.lastName}")
+                            intent.putExtra(
+                                "author",
+                                "${listBlog[position].idUser?.firstName} ${listBlog[position].idUser?.lastName}"
+                            )
                             startActivity(intent)
                         }
                     })

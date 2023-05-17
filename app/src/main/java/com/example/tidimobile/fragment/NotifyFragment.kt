@@ -12,11 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tidimobile.R
 import com.example.tidimobile.adapter.NotifyAdapter
 import com.example.tidimobile.api.ApiClient
-import com.example.tidimobile.api.ApiNoteInterface
 import com.example.tidimobile.api.ApiNotify
 import com.example.tidimobile.databinding.FragmentNotifyBinding
 import com.example.tidimobile.model.NotifyModel
-import com.example.tidimobile.model.ResponseMessage
 import com.example.tidimobile.storage.TokenPreferences
 import com.example.tidimobile.storage.UserPreferences
 import com.google.android.material.navigation.NavigationView
@@ -60,16 +58,18 @@ class NotifyFragment : Fragment() {
         binding.rcViewListNotify.visibility = View.GONE
         binding.tvLoading.visibility = View.VISIBLE
         notifyApi.getNotify("Bearer ${tokenPref.getToken()}")
-            .enqueue(object: Callback<NotifyModel>{
+            .enqueue(object : Callback<NotifyModel> {
                 override fun onResponse(
                     call: Call<NotifyModel>,
                     response: Response<NotifyModel>
                 ) {
-                    if(response.isSuccessful){
+                    if (response.isSuccessful) {
                         listNotify = response.body()?.notification!!
-                        binding.rcViewListNotify.layoutManager = LinearLayoutManager(requireContext())
+                        binding.rcViewListNotify.layoutManager =
+                            LinearLayoutManager(requireContext())
                         val nAdapter = NotifyAdapter(listNotify)
-                        nAdapter.setOnClickItemListener(object: NotifyAdapter.OnClickNotifyListener{
+                        nAdapter.setOnClickItemListener(object :
+                            NotifyAdapter.OnClickNotifyListener {
                             override fun onClickNotify(position: Int) {
 //                                val intent
                             }
@@ -77,7 +77,7 @@ class NotifyFragment : Fragment() {
                         })
                         binding.rcViewListNotify.adapter = nAdapter
 
-                    }else{
+                    } else {
                         Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                     }
                     binding.rcViewListNotify.visibility = View.VISIBLE

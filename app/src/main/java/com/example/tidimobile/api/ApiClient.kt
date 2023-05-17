@@ -2,7 +2,6 @@ package com.example.tidimobile.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 class ApiClient {
     companion object {
@@ -25,7 +24,7 @@ class ApiClient {
             return retrofit!!.create(ApiBlogInterface::class.java)
         }
 
-        fun getUser(): ApiUserInterface{
+        fun getUser(): ApiUserInterface {
             retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -33,7 +32,7 @@ class ApiClient {
             return retrofit!!.create(ApiUserInterface::class.java)
         }
 
-        fun getNotify(): ApiNotify{
+        fun getNotify(): ApiNotify {
             retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -41,7 +40,7 @@ class ApiClient {
             return retrofit!!.create(ApiNotify::class.java)
         }
 
-        fun getSearch(): ApiSearchInterface{
+        fun getSearch(): ApiSearchInterface {
             retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -49,7 +48,7 @@ class ApiClient {
             return retrofit!!.create(ApiSearchInterface::class.java)
         }
 
-        fun getFollow(): ApiFollower{
+        fun getFollow(): ApiFollower {
             retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

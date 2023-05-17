@@ -98,6 +98,7 @@ data class SearchModel(
             val _id: String? = null,
             val firstName: String? = null,
             val lastName: String? = null,
+            val avatar: String? = null
         )
     }
 }
@@ -107,6 +108,7 @@ data class UserInfoModel(
     val message: String? = null,
 ) {
     data class UserModelEdit(
+        val _id: String? = null,
         val firstName: String? = null,
         val lastName: String? = null,
         val email: String? = null,

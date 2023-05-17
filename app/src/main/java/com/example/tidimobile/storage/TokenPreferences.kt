@@ -20,18 +20,18 @@ class TokenPreferences(context: Context) {
         editor.apply()
     }
 
-    @SuppressLint("CommitPrefEdits")
-    fun refreshAccessToken(accessToken: String?) {
-        preferences!!.edit().putString("accessToken", accessToken).apply()
-    }
+//    @SuppressLint("CommitPrefEdits")
+//    fun refreshAccessToken(accessToken: String?) {
+//        preferences!!.edit().putString("accessToken", accessToken).apply()
+//    }
 
     fun getToken(): String? {
         return preferences!!.getString("accessToken", "")
     }
 
-    fun getRefreshToken(): String? {
-        return preferences!!.getString("refreshToken", "")
-    }
+//    fun getRefreshToken(): String? {
+//        return preferences!!.getString("refreshToken", "")
+//    }
 
     @SuppressLint("CommitPrefEdits")
     fun clearToken(){

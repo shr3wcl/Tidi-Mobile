@@ -32,7 +32,6 @@ class GenderDialog(context: Context, private val listener: GenderDialogListener)
     }
 
 
-
     interface GenderDialogListener {
         fun onGenderSelected(gender: String)
     }

@@ -28,13 +28,8 @@ class InfoBlogActivity : AppCompatActivity() {
     private lateinit var blogService: ApiBlogInterface
     private lateinit var idBlog: String
     private lateinit var listLiked: ArrayList<BlogOverviewModel.LikeOVModel>
-    private lateinit var titleBlog: String
-    private lateinit var desBlog: String
     private lateinit var nameAuthor: String
-    private lateinit var avatar: String
-    private lateinit var date: String
     private lateinit var idUser: String
-    private lateinit var totalLike: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +58,8 @@ class InfoBlogActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         binding.txtTitleOV.text = response.body()?.blog?.title!!
                         binding.txtDesOV.text = response.body()?.blog?.description!!
-                        nameAuthor = "${response.body()?.blog?.idUser?.firstName} ${response.body()?.blog?.idUser?.lastName}"
+                        nameAuthor =
+                            "${response.body()?.blog?.idUser?.firstName} ${response.body()?.blog?.idUser?.lastName}"
                         idUser = response.body()?.blog?.idUser?._id.toString()
                         binding.tvAuthorName.text =
                             "${response.body()?.blog?.idUser?.firstName} ${response.body()?.blog?.idUser?.lastName}"

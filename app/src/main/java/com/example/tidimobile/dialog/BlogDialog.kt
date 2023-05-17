@@ -2,7 +2,6 @@ package com.example.tidimobile.dialog
 
 import android.widget.EditText
 import com.example.tidimobile.R
-import com.example.tidimobile.model.BlogModel
 import kotlin.properties.Delegates
 import android.app.Dialog
 import android.content.Context
@@ -11,7 +10,14 @@ import android.widget.Button
 import android.widget.RadioGroup
 import com.example.tidimobile.model.ContentObject
 
-class BlogDialog(context: Context, private val listener: BlogDialogListener, private val titleInit: String, private val desInit: String, private val dataBlog: ContentObject, private val statusBlog: Boolean) : Dialog(context) {
+class BlogDialog(
+    context: Context,
+    private val listener: BlogDialogListener,
+    private val titleInit: String,
+    private val desInit: String,
+    private val dataBlog: ContentObject,
+    private val statusBlog: Boolean
+) : Dialog(context) {
 
     private lateinit var title: String
     private lateinit var description: String
@@ -32,7 +38,7 @@ class BlogDialog(context: Context, private val listener: BlogDialogListener, pri
             statusRadioGroup = findViewById(R.id.status_radio_group)
             title = titleBlog
             description = desBlog
-            status = when(statusRadioGroup.checkedRadioButtonId){
+            status = when (statusRadioGroup.checkedRadioButtonId) {
                 R.id.public_option -> true
                 R.id.private_option -> false
                 else -> false
@@ -44,8 +50,12 @@ class BlogDialog(context: Context, private val listener: BlogDialogListener, pri
     }
 
 
-
     interface BlogDialogListener {
-        fun onBlogSelected(title: String, description: String, dataBlog: ContentObject, statusBlog: Boolean)
+        fun onBlogSelected(
+            title: String,
+            description: String,
+            dataBlog: ContentObject,
+            statusBlog: Boolean
+        )
     }
 }

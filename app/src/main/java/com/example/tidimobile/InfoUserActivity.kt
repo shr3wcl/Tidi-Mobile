@@ -1,5 +1,6 @@
 package com.example.tidimobile
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -8,13 +9,12 @@ import android.os.Bundle
 import android.util.Base64
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.tidimobile.adapter.BlogsAdapter
 import com.example.tidimobile.adapter.FollowAdapter
-import com.example.tidimobile.adapter.FollowingApdater
+import com.example.tidimobile.adapter.FollowingAdapter
 import com.example.tidimobile.api.ApiBlogInterface
 import com.example.tidimobile.api.ApiClient
 import com.example.tidimobile.api.ApiFollower
@@ -46,7 +46,6 @@ class InfoUserActivity : AppCompatActivity() {
         binding.txtNameProfile.text = intent.getStringExtra("name")
         title = intent.getStringExtra("name")
         idUser = intent.getStringExtra("idUserBlog").toString()
-        getCheckFollow()
         getDataBlog()
         binding.btnFollow.setOnClickListener {
             if (binding.btnFollow.text == "Follow") {
@@ -73,6 +72,14 @@ class InfoUserActivity : AppCompatActivity() {
             binding.tvFollowingBtn.setBackgroundColor(Color.WHITE)
             getDataFollower()
         }
+        if (TokenPreferences(applicationContext).getToken().toString()
+                .isNotEmpty() && UserPreferences(applicationContext).getInfoUser()._id != idUser
+        ) {
+            binding.btnFollow.visibility = View.VISIBLE
+            getCheckFollow()
+        } else {
+            binding.btnFollow.visibility = View.GONE
+        }
         getDataFollower()
         getInfoUser()
     }
@@ -85,20 +92,22 @@ class InfoUserActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     userCurrent = response.body()?.user!!
-                    try {
-                        val imageBytes = Base64.decode(userCurrent.avatar, Base64.DEFAULT)
+                    if (userCurrent.avatar.toString().isNotEmpty()) {
+                        try {
+                            val imageBytes = Base64.decode(userCurrent.avatar, Base64.DEFAULT)
 
-                        val decodedImage =
-                            BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        Glide.with(applicationContext).load(decodedImage).diskCacheStrategy(
-                            DiskCacheStrategy.ALL
-                        ).circleCrop().into(binding.imageViewAvatar)
-                    } catch (e: java.lang.Exception) {
-                        Toast.makeText(
-                            applicationContext,
-                            "Cannot load image now",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            val decodedImage =
+                                BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                            Glide.with(applicationContext).load(decodedImage).diskCacheStrategy(
+                                DiskCacheStrategy.ALL
+                            ).circleCrop().into(binding.imageViewAvatar)
+                        } catch (e: java.lang.Exception) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Cannot load image now",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 } else {
                     Toast.makeText(
@@ -129,6 +138,7 @@ class InfoUserActivity : AppCompatActivity() {
             "Bearer ${TokenPreferences(applicationContext).getToken()}",
             followForm
         ).enqueue(object : Callback<ResponseMessage> {
+            @SuppressLint("SetTextI18n")
             override fun onResponse(
                 call: Call<ResponseMessage>,
                 response: Response<ResponseMessage>
@@ -150,13 +160,13 @@ class InfoUserActivity : AppCompatActivity() {
                         notify
                     ).enqueue(object : Callback<ResponseMessage> {
                         override fun onResponse(
-                            call: retrofit2.Call<ResponseMessage>,
+                            call: Call<ResponseMessage>,
                             response: Response<ResponseMessage>
                         ) {
                         }
 
                         override fun onFailure(
-                            call: retrofit2.Call<ResponseMessage>,
+                            call: Call<ResponseMessage>,
                             t: Throwable
                         ) {
                             Toast.makeText(
@@ -191,6 +201,7 @@ class InfoUserActivity : AppCompatActivity() {
             "Bearer ${TokenPreferences(applicationContext).getToken()}",
             followForm
         ).enqueue(object : Callback<ResponseMessage> {
+            @SuppressLint("SetTextI18n")
             override fun onResponse(
                 call: Call<ResponseMessage>,
                 response: Response<ResponseMessage>
@@ -283,8 +294,8 @@ class InfoUserActivity : AppCompatActivity() {
                     listFollowing = response.body()?.followers!!
                     binding.rcViewListFollowing.layoutManager =
                         LinearLayoutManager(applicationContext)
-                    val ferAdapter = FollowingApdater(listFollowing)
-                    ferAdapter.setOnItemClickListener(object : FollowingApdater.OnFlwClickListener {
+                    val ferAdapter = FollowingAdapter(listFollowing)
+                    ferAdapter.setOnItemClickListener(object : FollowingAdapter.OnFlwClickListener {
                         override fun onClickFlw(position: Int) {
                             val intentUser =
                                 Intent(applicationContext, InfoUserActivity::class.java)
@@ -373,6 +384,7 @@ class InfoUserActivity : AppCompatActivity() {
             }", followForm
         )
         call.enqueue(object : Callback<FollowModelCheck> {
+            @SuppressLint("SetTextI18n")
             override fun onResponse(
                 call: Call<FollowModelCheck>,
                 response: Response<FollowModelCheck>
@@ -387,7 +399,7 @@ class InfoUserActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         applicationContext,
-                        "Toang",
+                        "Error",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

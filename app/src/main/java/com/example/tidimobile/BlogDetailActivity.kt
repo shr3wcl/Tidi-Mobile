@@ -15,13 +15,10 @@ import com.example.tidimobile.api.ApiBlogInterface
 import com.example.tidimobile.api.ApiClient
 import com.example.tidimobile.api.Url
 import com.example.tidimobile.databinding.ActivityBlogDetailBinding
-import com.example.tidimobile.databinding.ActivityInfoBlogBinding
 import com.example.tidimobile.model.NotifyStoreModel
 import com.example.tidimobile.model.ResponseMessage
 import com.example.tidimobile.storage.TokenPreferences
 import com.example.tidimobile.storage.UserPreferences
-import okhttp3.Call
-import org.w3c.dom.Comment
 import retrofit2.Callback
 import retrofit2.Response
 
@@ -104,7 +101,6 @@ class BlogDetailActivity : AppCompatActivity() {
                 true
             }
         } else {
-            val intentT = Intent(applicationContext, EditBlogActivity::class.java)
             binding.navView.menu.findItem(R.id.item1).title = "Like"
             binding.navView.menu.findItem(R.id.item2).title = "Comment"
             binding.navView.menu.findItem(R.id.item3).title = "Info"

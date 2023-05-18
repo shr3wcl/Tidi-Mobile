@@ -7,7 +7,8 @@ import android.widget.Button
 import android.widget.EditText
 import com.example.tidimobile.R
 
-class ChangePasswordDialog(context: Context, private val listener: PasswordDialogListener) : Dialog(context) {
+class ChangePasswordDialog(context: Context, private val listener: PasswordDialogListener) :
+    Dialog(context) {
 
     private lateinit var currentPassword: String
     private lateinit var newPassword: String
@@ -29,8 +30,11 @@ class ChangePasswordDialog(context: Context, private val listener: PasswordDialo
     }
 
 
-
     interface PasswordDialogListener {
-        fun onChangePasswordSelected(currentPassword: String, newPassword: String, confirmNewPassword: String)
+        fun onChangePasswordSelected(
+            currentPassword: String,
+            newPassword: String,
+            confirmNewPassword: String
+        )
     }
 }

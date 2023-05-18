@@ -16,11 +16,21 @@ interface ApiFollower {
     fun getAll(@Path("idUser") idUser: String): Call<FollowModelGet>
 
     @POST("/v1/user/follow/add/{idUser}")
-    fun follow(@Path("idUser") idUser: String, @Header("token") token: String, @Body formBody: FollowModelAdd): Call<ResponseMessage>
+    fun follow(
+        @Path("idUser") idUser: String,
+        @Header("token") token: String,
+        @Body formBody: FollowModelAdd
+    ): Call<ResponseMessage>
 
     @POST("/v1/user/follow/delete")
-    fun unfollow(@Header("token") token: String, @Body formBody: FollowModelAdd): Call<ResponseMessage>
+    fun unfollow(
+        @Header("token") token: String,
+        @Body formBody: FollowModelAdd
+    ): Call<ResponseMessage>
 
     @POST("/v1/user/follow/check")
-    fun checkFollow(@Header("token") token: String, @Body formBody: FollowModelAdd): Call<FollowModelCheck>
+    fun checkFollow(
+        @Header("token") token: String,
+        @Body formBody: FollowModelAdd
+    ): Call<FollowModelCheck>
 }

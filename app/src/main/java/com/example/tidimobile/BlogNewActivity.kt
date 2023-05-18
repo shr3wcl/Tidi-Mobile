@@ -63,8 +63,13 @@ class BlogNewActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                val dialog = BlogDialog(this, object : BlogDialog.BlogDialogListener{
-                    override fun onBlogSelected(title: String, description: String, dataBlog: ContentObject, statusBg: Boolean) {
+                val dialog = BlogDialog(this, object : BlogDialog.BlogDialogListener {
+                    override fun onBlogSelected(
+                        title: String,
+                        description: String,
+                        dataBlog: ContentObject,
+                        statusBg: Boolean
+                    ) {
                         titleBlog = title
                         desBlog = description
                         dataBlogSave = dataBlog
@@ -81,15 +86,20 @@ class BlogNewActivity : AppCompatActivity() {
     }
 
     private fun saveBlog() {
-        val blogEditedData = BlogNewModel(userPrefs.getInfoUser()._id, titleBlog, dataBlogSave, desBlog, statusBlog)
+        val blogEditedData =
+            BlogNewModel(userPrefs.getInfoUser()._id, titleBlog, dataBlogSave, desBlog, statusBlog)
         val call = blogService.saveNewBlog("Bearer ${tokenPrefs.getToken()}", blogEditedData)
         call.enqueue(object : Callback<ResponseMessage> {
             override fun onResponse(
                 call: Call<ResponseMessage>,
                 response: Response<ResponseMessage>
             ) {
-                if(response.isSuccessful){
-                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_LONG).show()
+                if (response.isSuccessful) {
+                    Toast.makeText(
+                        applicationContext,
+                        response.body()?.message.toString(),
+                        Toast.LENGTH_LONG
+                    ).show()
                     val intentM = Intent(applicationContext, MainActivity::class.java)
 //                    intentM.putExtra("id", idBlog)
 //                    intentM.putExtra("title", titleBlog)
@@ -97,8 +107,7 @@ class BlogNewActivity : AppCompatActivity() {
 //                    intentM.putExtra("author", intent.getStringExtra("nameAuthor").toString())
 //                    intentM.putExtra("idUser", idUser)
                     startActivity(intentM)
-                }
-                else{
+                } else {
                     Toast.makeText(applicationContext, "Error 403", Toast.LENGTH_LONG).show()
 
                 }

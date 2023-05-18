@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tidimobile.adapter.CommentAdapter
@@ -68,13 +67,13 @@ class CommentActivity : AppCompatActivity() {
                             .storeNotify(idAuthor, "Bearer ${tokenPreferences.getToken()}", notify)
                             .enqueue(object : Callback<ResponseMessage> {
                                 override fun onResponse(
-                                    call: retrofit2.Call<ResponseMessage>,
+                                    call: Call<ResponseMessage>,
                                     response: Response<ResponseMessage>
                                 ) {
                                 }
 
                                 override fun onFailure(
-                                    call: retrofit2.Call<ResponseMessage>,
+                                    call: Call<ResponseMessage>,
                                     t: Throwable
                                 ) {
                                     Toast.makeText(
@@ -116,7 +115,10 @@ class CommentActivity : AppCompatActivity() {
                     adapter.setOnItemClickListener(object : CommentAdapter.OnCmtClickListener {
                         override fun onClickCmt(position: Int) {
                             val intentT = Intent(applicationContext, InfoUserActivity::class.java)
-                            intentT.putExtra("name", listComment[position].idUser?.firstName + " " + listComment[position].idUser?.lastName)
+                            intentT.putExtra(
+                                "name",
+                                listComment[position].idUser?.firstName + " " + listComment[position].idUser?.lastName
+                            )
                             intentT.putExtra("idUserBlog", listComment[position].idUser?._id)
                             startActivity(intentT)
                         }

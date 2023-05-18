@@ -44,10 +44,10 @@ class UserPreferences(context: Context) {
             preferences!!.getString("birthday", ""),
             preferences!!.getString("bio", ""),
             preferences!!.getString("dayJoined", ""),
-            )
+        )
     }
 
-    fun saveInfoEditor(userData: UserEditResponse.UserModelEdit){
+    fun saveInfoEditor(userData: UserEditResponse.UserModelEdit) {
         val editor = preferences!!.edit()
 
         editor.putString("firstName", userData.firstName)
@@ -60,13 +60,14 @@ class UserPreferences(context: Context) {
 
     }
 
-    fun changeAvatar(avatar: String){
+    fun changeAvatar(avatar: String) {
         val editor = preferences!!.edit()
         editor.putString("avatar", avatar)
         editor.apply()
     }
+
     @SuppressLint("CommitPrefEdits")
-    fun clearInfo(){
+    fun clearInfo() {
         preferences!!.edit().clear().apply()
     }
 }

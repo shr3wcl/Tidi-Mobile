@@ -52,7 +52,7 @@ class EditBlogActivity : AppCompatActivity() {
         titleBlog = intent.getStringExtra("title").toString()
         desBlog = intent.getStringExtra("description").toString()
         idUser = intent.getStringExtra("idUser").toString()
-        statusBlog = when(intent.getStringExtra("status")){
+        statusBlog = when (intent.getStringExtra("status")) {
             "true" -> true
             "false" -> false
             else -> true
@@ -75,8 +75,13 @@ class EditBlogActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                val dialog = BlogDialog(this, object : BlogDialog.BlogDialogListener{
-                    override fun onBlogSelected(title: String, description: String, dataBlog: ContentObject, statBlog: Boolean) {
+                val dialog = BlogDialog(this, object : BlogDialog.BlogDialogListener {
+                    override fun onBlogSelected(
+                        title: String,
+                        description: String,
+                        dataBlog: ContentObject,
+                        statBlog: Boolean
+                    ) {
                         titleBlog = title
                         desBlog = description
                         dataBlogSave = dataBlog
@@ -92,16 +97,21 @@ class EditBlogActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveBlog(){
-        val blogEditedData = BlogModel.BlogObject(idBlog, idUser, titleBlog, statusBlog, null, dataBlogSave, desBlog)
+    private fun saveBlog() {
+        val blogEditedData =
+            BlogModel.BlogObject(idBlog, idUser, titleBlog, statusBlog, null, dataBlogSave, desBlog)
         val call = blogService.editBlog("Bearer ${tokenPrefs.getToken()}", blogEditedData, idBlog)
         call.enqueue(object : Callback<ResponseMessage> {
             override fun onResponse(
                 call: Call<ResponseMessage>,
                 response: Response<ResponseMessage>
             ) {
-                if(response.isSuccessful){
-                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_LONG).show()
+                if (response.isSuccessful) {
+                    Toast.makeText(
+                        applicationContext,
+                        response.body()?.message.toString(),
+                        Toast.LENGTH_LONG
+                    ).show()
                     val intentM = Intent(applicationContext, BlogDetailActivity::class.java)
                     intentM.putExtra("id", idBlog)
                     intentM.putExtra("title", titleBlog)
@@ -109,8 +119,7 @@ class EditBlogActivity : AppCompatActivity() {
                     intentM.putExtra("author", intent.getStringExtra("nameAuthor").toString())
                     intentM.putExtra("idUser", idUser)
                     startActivity(intentM)
-                }
-                else{
+                } else {
                     Toast.makeText(applicationContext, "Error 403", Toast.LENGTH_LONG).show()
 
                 }

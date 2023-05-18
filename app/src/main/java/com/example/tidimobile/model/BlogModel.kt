@@ -55,11 +55,11 @@ data class BlogModelDetail(
 }
 
 data class BlogNewModel(
-    val idUser: String?=null,
-    val title: String?=null,
-    val content: ContentObject?=null,
-    val description: String?=null,
-    val status: Boolean?= null
+    val idUser: String? = null,
+    val title: String? = null,
+    val content: ContentObject? = null,
+    val description: String? = null,
+    val status: Boolean? = null
 )
 
 //data class BlogSearchModel(
@@ -98,35 +98,35 @@ data class ContentObject(
 }
 
 data class BlogOverviewModel(
-    val blog: BlogOVModel?= null,
-    val like: ArrayList<LikeOVModel>?=null,
-){
+    val blog: BlogOVModel? = null,
+    val like: ArrayList<LikeOVModel>? = null,
+) {
     data class BlogOVModel(
-        val _id: String?=null,
-        val idUser: UserOVModel?=null,
-        val title: String?=null,
-        val description: String?=null,
-        val status: Boolean?=null,
-        val createdAt: String?=null
-    ){
+        val _id: String? = null,
+        val idUser: UserOVModel? = null,
+        val title: String? = null,
+        val description: String? = null,
+        val status: Boolean? = null,
+        val createdAt: String? = null
+    ) {
         data class UserOVModel(
-            val _id: String?=null,
-            val firstName: String?=null,
-            val lastName: String?=null,
-            val avatar: String?=null
+            val _id: String? = null,
+            val firstName: String? = null,
+            val lastName: String? = null,
+            val avatar: String? = null
         )
     }
 
     data class LikeOVModel(
-        val _id: String?=null,
-        val idBlog: String?=null,
-        val idUser: UserML?=null,
-        val createdAt: String?=null,
-    ){
+        val _id: String? = null,
+        val idBlog: String? = null,
+        val idUser: UserML? = null,
+        val createdAt: String? = null,
+    ) {
         data class UserML(
-            val _id: String?=null,
-            val firstName: String?=null,
-            val lastName: String?=null
+            val _id: String? = null,
+            val firstName: String? = null,
+            val lastName: String? = null
         )
     }
 }

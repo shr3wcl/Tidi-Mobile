@@ -37,8 +37,9 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var userService: ApiUserInterface
     private lateinit var tokenPrefs: TokenPreferences
     private lateinit var service: ApiAuthInterface
-    private val PICK_IMAGE_REQUEST = 1
+    private val pickImageRequest = 1
     private var filePath: Uri? = null
+
     @SuppressLint("PrivateResource", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +56,7 @@ class EditProfileActivity : AppCompatActivity() {
             val intent = Intent()
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(Intent.createChooser(intent, "Select Image"), PICK_IMAGE_REQUEST)
+            startActivityIfNeeded(intent, pickImageRequest)
         }
         binding.txtBirthdayProfile.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -130,12 +131,13 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
     }
+
     @Deprecated("Deprecated in Java")
     @SuppressLint("Recycle")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
+        if (requestCode == pickImageRequest && resultCode == RESULT_OK && data != null && data.data != null) {
             filePath = data.data
             try {
                 val inputStream = contentResolver.openInputStream(filePath!!)
@@ -148,18 +150,25 @@ class EditProfileActivity : AppCompatActivity() {
                 val avatar = Base64.encodeToString(bytes.toByteArray(), Base64.DEFAULT)
 
 
-                val call = userService.changeAvatar("Bearer ${tokenPrefs.getToken()}", AvatarModel(avatar))
-                call.enqueue(object : Callback<ResponseMessage>{
+                val call =
+                    userService.changeAvatar("Bearer ${tokenPrefs.getToken()}", AvatarModel(avatar))
+                call.enqueue(object : Callback<ResponseMessage> {
                     override fun onResponse(
                         call: Call<ResponseMessage>,
                         response: Response<ResponseMessage>
                     ) {
-                        if(response.isSuccessful){
+                        if (response.isSuccessful) {
                             userPrefs.changeAvatar(avatar)
-                            Glide.with(applicationContext).load(base64ToBitmap(avatar)).circleCrop().diskCacheStrategy(
-                                DiskCacheStrategy.ALL).into(binding.imageViewAvatar)
-                            Toast.makeText(applicationContext, "Change Avatar Successfully", Toast.LENGTH_SHORT).show()
-                        }else{
+                            Glide.with(applicationContext).load(base64ToBitmap(avatar)).circleCrop()
+                                .diskCacheStrategy(
+                                    DiskCacheStrategy.ALL
+                                ).into(binding.imageViewAvatar)
+                            Toast.makeText(
+                                applicationContext,
+                                "Change Avatar Successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
                             Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -191,8 +200,10 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun saveInfo() {
-        val firstName = capitalizeWords(binding.txtFirstNameProfile.text.toString().trimEnd('>').trim())
-        val lastName = capitalizeWords(binding.txtLastNameProfile.text.toString().trimEnd('>').trim())
+        val firstName =
+            capitalizeWords(binding.txtFirstNameProfile.text.toString().trimEnd('>').trim())
+        val lastName =
+            capitalizeWords(binding.txtLastNameProfile.text.toString().trimEnd('>').trim())
         val birthday = binding.txtBirthdayProfile.text.toString().trimEnd('>').trim()
         val bio = binding.txtBioProfile.text.toString().trimEnd('>').trim()
         val email = binding.txtEmail.text.toString().trimEnd('>').trim()
@@ -237,10 +248,12 @@ class EditProfileActivity : AppCompatActivity() {
         val outputFormat = SimpleDateFormat("HH:mm:ss - dd/MM/yyyy")
         val dateFormat = outputFormat.format(date)
         try {
-            Glide.with(this).load(user.avatar?.let { base64ToBitmap(it) }).circleCrop().diskCacheStrategy(
-                DiskCacheStrategy.ALL).into(binding.imageViewAvatar)
+            Glide.with(this).load(user.avatar?.let { base64ToBitmap(it) }).circleCrop()
+                .diskCacheStrategy(
+                    DiskCacheStrategy.ALL
+                ).into(binding.imageViewAvatar)
             binding.imageViewAvatar.setImageBitmap(user.avatar?.let { base64ToBitmap(it) })
-        }catch (e: java.lang.Exception){
+        } catch (e: java.lang.Exception) {
             Toast.makeText(applicationContext, "Cannot load image now", Toast.LENGTH_SHORT).show()
         }
         binding.txtGenderProfile.text = user.gender + " >"
@@ -254,22 +267,26 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun changePassword(currentPassword: String, newPwd: String, retypePwd: String) {
-        if(newPwd != retypePwd){
+        if (newPwd != retypePwd) {
             Toast.makeText(applicationContext, "Password not match", Toast.LENGTH_SHORT).show()
 //            findViewById<EditText>(R.id.txtNewPassword).error = "Password not match"
             return
         }
         val newPasswd = UserChangePwdModel(currentPassword, newPwd)
         val call = userService.changePassword("Bearer ${tokenPrefs.getToken()}", newPasswd)
-        call.enqueue(object: Callback<ResponseMessage>{
+        call.enqueue(object : Callback<ResponseMessage> {
             override fun onResponse(
                 call: Call<ResponseMessage>,
                 response: Response<ResponseMessage>
             ) {
-                if(response.isSuccessful){
-                    Toast.makeText(applicationContext, "${response.body()?.message}, please login again!", Toast.LENGTH_SHORT).show()
+                if (response.isSuccessful) {
+                    Toast.makeText(
+                        applicationContext,
+                        "${response.body()?.message}, please login again!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     logout()
-                }else{
+                } else {
                     Toast.makeText(applicationContext, "Error", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -286,6 +303,7 @@ class EditProfileActivity : AppCompatActivity() {
         val imageBytes = Base64.decode(base64String, Base64.DEFAULT)
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }
+
     private fun logout() {
         val call = service.logoutUser("Bearer ${tokenPrefs.getToken()}")
         call.enqueue(object : Callback<ResponseMessage> {
@@ -293,7 +311,11 @@ class EditProfileActivity : AppCompatActivity() {
                 call: Call<ResponseMessage>,
                 response: Response<ResponseMessage>
             ) {
-                Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    applicationContext,
+                    response.body()?.message.toString(),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
                 tokenPrefs.clearToken()
                 userPrefs.clearInfo()
@@ -306,12 +328,14 @@ class EditProfileActivity : AppCompatActivity() {
 
         })
     }
+
     private fun capitalizeWords(str: String): String {
         val words = str.split(" ")
         val capitalizedWords = mutableListOf<String>()
         for (word in words) {
             if (word.isNotEmpty()) {
-                val capitalizedWord = word.substring(0, 1).uppercase(Locale.ROOT) + word.substring(1)
+                val capitalizedWord =
+                    word.substring(0, 1).uppercase(Locale.ROOT) + word.substring(1)
                 capitalizedWords.add(capitalizedWord)
             }
         }

@@ -13,21 +13,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tidimobile.BlogDetailActivity
+import com.example.tidimobile.InfoUserActivity
 import com.example.tidimobile.adapter.BlogsAdapter
+import com.example.tidimobile.adapter.UserSearchAdapter
 import com.example.tidimobile.api.ApiClient
 import com.example.tidimobile.databinding.FragmentSearchBinding
 import com.example.tidimobile.model.BlogModelBasic
 import com.example.tidimobile.model.SearchKeyModel
 import com.example.tidimobile.model.SearchModel
+import com.example.tidimobile.model.UserSearchModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
-    private var searchSevice = ApiClient.getSearch()
+    private var searchService = ApiClient.getSearch()
     private lateinit var data: SearchModel
     private lateinit var listSearch: ArrayList<BlogModelBasic.BlogBasicObject>
+    private lateinit var listUserSearch: ArrayList<UserSearchModel.UserSearchDetail>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,7 +45,11 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSearchBinding.inflate(layoutInflater)
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, getTempData())
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            getTempData()
+        )
         binding.searchBar.setAdapter(adapter)
         binding.searchBtn.setOnClickListener {
             search()
@@ -50,18 +58,64 @@ class SearchFragment : Fragment() {
     }
 
     private fun search() {
-        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view?.windowToken , 0)
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
         binding.rcViewSearch.visibility = View.GONE
+        binding.rcViewUserSearch.visibility = View.GONE
 //        binding.tvLoading.visibility = View.VISIBLE
         val keySearch = binding.searchBar.text.toString()
-        searchSevice.search(SearchKeyModel(keySearch)).enqueue(object : Callback<BlogModelBasic>{
+        searchService.searchUser(SearchKeyModel(keySearch))
+            .enqueue(object : Callback<UserSearchModel> {
+                override fun onResponse(
+                    call: Call<UserSearchModel>,
+                    response: Response<UserSearchModel>
+                ) {
+                    if (response.isSuccessful) {
+                        listUserSearch = response.body()?.users!!
+                        binding.rcViewUserSearch.layoutManager =
+                            LinearLayoutManager(requireContext())
+                        val bAdapter = UserSearchAdapter(listUserSearch)
+                        bAdapter.setOnItemClickListener(object :
+                            UserSearchAdapter.OnUserSearchClickListener {
+                            override fun onClickUserSearch(position: Int) {
+                                val intentUser = Intent(context, InfoUserActivity::class.java)
+                                intentUser.putExtra(
+                                    "name",
+                                    listUserSearch[position].firstName + " " + listUserSearch[position].lastName
+                                )
+                                intentUser.putExtra("idUserBlog", listUserSearch[position]._id)
+                                startActivity(intentUser)
+                            }
+                        })
+                        binding.rcViewUserSearch.adapter = bAdapter
+                        binding.rcViewUserSearch.visibility = View.VISIBLE
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Error, please try again later!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<UserSearchModel>,
+                    t: Throwable
+                ) {
+                    Toast.makeText(context, "Error, please try again later!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+            })
+        searchService.search(SearchKeyModel(keySearch)).enqueue(object : Callback<BlogModelBasic> {
             override fun onResponse(
                 call: Call<BlogModelBasic>,
                 response: Response<BlogModelBasic>
             ) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     listSearch = response.body()?.blogs!!
+
                     binding.rcViewSearch.layoutManager = LinearLayoutManager(requireContext())
                     val bAdapter = BlogsAdapter(listSearch)
                     bAdapter.setOnItemClickListener(object : BlogsAdapter.OnBlogClickListener {
@@ -81,13 +135,14 @@ class SearchFragment : Fragment() {
                     })
                     binding.rcViewSearch.adapter = bAdapter
                     binding.rcViewSearch.visibility = View.VISIBLE
-                }else{
-                    Toast.makeText(context, "Error 1", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Error, please try again later!", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
             override fun onFailure(call: Call<BlogModelBasic>, t: Throwable) {
-                Toast.makeText(context, "Error 2", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Error, please try again later!", Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -95,9 +150,9 @@ class SearchFragment : Fragment() {
 
     private fun getTempData(): ArrayList<Any> {
         val suggestion = ArrayList<Any>()
-        searchSevice.get4Search().enqueue(object: Callback<SearchModel>{
+        searchService.get4Search().enqueue(object : Callback<SearchModel> {
             override fun onResponse(call: Call<SearchModel>, response: Response<SearchModel>) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     data = response.body()!!
                     val users = response.body()!!.data?.users
                     val blogs = response.body()!!.data?.blogs
@@ -105,11 +160,11 @@ class SearchFragment : Fragment() {
                     val listBlogs = blogs?.map { it.title.toString() }!!.toTypedArray()
                     suggestion.addAll(listBlogs)
                     suggestion.addAll(listUsers)
-                }
-                else{
+                } else {
                     data = SearchModel()
                 }
             }
+
             override fun onFailure(call: Call<SearchModel>, t: Throwable) {
                 data = SearchModel()
             }
